@@ -36,7 +36,6 @@ public class Panel extends javax.swing.JPanel {
         this.connect = connect;
     }
 
-
     public Panel() {
     	
     	predecessor = null;
@@ -75,8 +74,7 @@ public class Panel extends javax.swing.JPanel {
                         
                     }
                 }
-                repaint();
-                
+                repaint(); 
         } 
             
           public void mouseClicked(MouseEvent e) { 
@@ -134,9 +132,7 @@ public class Panel extends javax.swing.JPanel {
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "Error.");
                 }
-                
                 repaint(); 
-
                 }
           } 
 
@@ -236,7 +232,7 @@ public class Panel extends javax.swing.JPanel {
     }
     
 	public static void restart() {
-		connect.clear(); 
+	connect.clear(); 
     	nodes.clear();
 	}
 }
