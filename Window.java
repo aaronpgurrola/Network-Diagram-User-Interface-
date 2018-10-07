@@ -9,7 +9,7 @@ public class Window extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton;
-    private javax.swing.JPanel 	jPanel1;
+    private javax.swing.JPanel  jPanel1;
     public List <Node> nodes;
     public List <Add> connect;
     private int APPLET_WIDTH = 800, APPLET_HEIGHT = 600;
