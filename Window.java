@@ -12,10 +12,6 @@ public class Window extends javax.swing.JFrame {
     private javax.swing.JPanel 	jPanel1;
     public List <Node> nodes;
     public List <Add> connect;
-    
-    Panel windowPanel = new Panel();
-  
-
     private int APPLET_WIDTH = 800, APPLET_HEIGHT = 600;
     
     public Window() {
@@ -57,9 +53,7 @@ public class Window extends javax.swing.JFrame {
                 jButtonActionPerformed(evt);
             }
         });
-        
-    
-        
+  
         jButton1.setBackground(new java.awt.Color(51, 204, 255));
         jButton1.setText("Restart");
         
