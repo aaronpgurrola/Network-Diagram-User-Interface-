@@ -14,7 +14,6 @@ import javax.swing.JOptionPane;
 public class Panel extends javax.swing.JPanel {
     
     boolean flag = false;
-    boolean flag1 = false;
     Node predecessor;
     Node destination;
     public static List <Node> nodes;
