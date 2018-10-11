@@ -218,8 +218,7 @@ public class Window extends javax.swing.JFrame {
 
         JOptionPane.showMessageDialog(null, "Start by creating an activity node.\n"
         		+ "Pressing any button, and it will create a dialogue box with information on the button.\n"
-        		+"To exit the program, press the End Application button.");
-        System.exit(0);
+                +"To exit the program, press the End Application button.");
     }
     
     /**END ACTIONS**/
@@ -231,3 +230,4 @@ public class Window extends javax.swing.JFrame {
             }
         });
     }
+}
