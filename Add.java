@@ -8,8 +8,8 @@ public class Add {
     private Node destination;// Node destination
     private int duration;// Node duration
 
-    //getters setters
-
+    // Getter and Setter methods 
+    
     public Node getPredecessor() {
         return predecessor;
     }
@@ -33,5 +33,4 @@ public class Add {
     public void setDuration(int duration) {
         this.duration = duration;
     }
-    
 }
