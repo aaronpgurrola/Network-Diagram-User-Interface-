@@ -1,4 +1,4 @@
-
+package netgraph;
 import java.awt.Point;
 
 public class Node {

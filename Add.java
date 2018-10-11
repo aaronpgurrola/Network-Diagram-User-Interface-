@@ -1,4 +1,4 @@
-
+package netgraph;
 public class Add {
     
     public Add() {
