@@ -1,7 +1,6 @@
 
 import java.awt.Point;
 
-
 public class Node {
     
     public Node() {
@@ -11,9 +10,7 @@ public class Node {
     private Point point; // location of the node 
     private int activityDuration; 
 
-    //getters setters
-
- 
+    // Getter and Setter methods 
     public void setActivityName(String activityName) {
         this.activityName = activityName;
     }
@@ -22,7 +19,6 @@ public class Node {
         return activityName;
     }
     
-    // .
     public void setActivityDuration(int activityDuration) {
         this.activityDuration = activityDuration;
     }
@@ -31,7 +27,6 @@ public class Node {
         return activityDuration;
     }
     
-
     public Point getPoint() {
         return point;
     }
