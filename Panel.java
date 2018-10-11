@@ -72,8 +72,8 @@ public class Panel extends javax.swing.JPanel {
                 	String activityDuration = JOptionPane.showInputDialog("Enter the duration of the activity:");
                 	int aDuration = Integer.parseInt(activityDuration);
                 	n.setActivityDuration(aDuration);
-                	n.setPoint(e.getPoint());
-                        nodes.add(n); // add new node to the list
+                	n.setPoint(e.getPoint());    
+                       nodes.add(n); // add new node to the list
                         
                 	}catch(Exception ex){
                 		
