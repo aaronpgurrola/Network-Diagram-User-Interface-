@@ -5,13 +5,18 @@ import javax.swing.JOptionPane;
 
 public class Window extends javax.swing.JFrame {
 	
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton;
+    private javax.swing.JButton jButtonAdd;
+    private javax.swing.JButton jButtonConnect;
+    private javax.swing.JButton jButtonRestart;
+    private javax.swing.JButton jButtonEnd;
+    private javax.swing.JButton jButtonHelp;
+    private javax.swing.JButton jButtonAbout;
+    
     private javax.swing.JPanel  jPanel1;
+    
     public List <Node> nodes;
     public List <Add> connect;
+    
     private int APPLET_WIDTH = 800, APPLET_HEIGHT = 600;
     
     public Window() {
@@ -21,75 +26,127 @@ public class Window extends javax.swing.JFrame {
 
     private void initComponents() {
     	
+    	//jPanel Creation
         jPanel1 = new Panel();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jButton = new javax.swing.JButton();
         
+        //jButton Creation
+        jButtonAdd = new javax.swing.JButton();
+        jButtonConnect = new javax.swing.JButton();
+        jButtonRestart = new javax.swing.JButton();
+        jButtonEnd = new javax.swing.JButton();
+        jButtonHelp = new javax.swing.JButton();
+        jButtonAbout = new javax.swing.JButton();
+        
+        //Arraylist creation
         this.nodes = new ArrayList<>();
         this.connect = new ArrayList<>();
         
+        //EXIT ON CLOSE as Default
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        
+        //Title
         setTitle("Network Diagram");
-
+        
+        //Set background
         jPanel1.setBackground(new java.awt.Color(153, 153, 153));
-
+        
+        /**LAYOUT**/
+        
+        //Set group layout on jpanel1
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         
+        //Set horizontal group
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 525, Short.MAX_VALUE));
+        
+        //Set vertical group
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 523, Short.MAX_VALUE)); 
         
-        jButton.setBackground(new java.awt.Color(51, 204, 255));
-        jButton.setText("End Application");
+        /**END LAYOUT**/
         
-        jButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonActionPerformed(evt);
-            }
-        });
-  
-        jButton1.setBackground(new java.awt.Color(51, 204, 255));
-        jButton1.setText("Restart");
         
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
-        jButton2.setBackground(new java.awt.Color(51, 204, 255));
-        jButton2.setText("Add Activity");
+        /**BUTTON SETUP**/
         
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
-        jButton3.setBackground(new java.awt.Color(51, 204, 255));
-        jButton3.setText("Connect Activities");
+        /*All buttons setup with setBackground, setText, and configured ActionListener*/
         
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        //End Application Button
+        jButtonEnd.setBackground(new java.awt.Color(51, 204, 255));
+        jButtonEnd.setText("End Application");
+        
+        jButtonEnd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                jButtonEndActionPerformed(evt);
             }
         });
         
+        //Restart Button
+        jButtonRestart.setBackground(new java.awt.Color(51, 204, 255));
+        jButtonRestart.setText("Restart");
+        
+        jButtonRestart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRestartActionPerformed(evt);
+            }
+        });
+        
+        //Add Activity Button
+        jButtonAdd.setBackground(new java.awt.Color(51, 204, 255));
+        jButtonAdd.setText("Add Activity");
+        
+        jButtonAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAddActionPerformed(evt);
+            }
+        });
+        
+        //Connect Activities Button
+        jButtonConnect.setBackground(new java.awt.Color(51, 204, 255));
+        jButtonConnect.setText("Connect Activities");
+        
+        jButtonConnect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonConnectActionPerformed(evt);
+            }
+        });
+        
+      //About Button
+        jButtonAbout.setBackground(new java.awt.Color(51, 204, 255));
+        jButtonAbout.setText("About");
+        
+        jButtonAbout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAboutActionPerformed(evt);
+            }
+        });
+        
+        //About Button
+        jButtonHelp.setBackground(new java.awt.Color(51, 204, 255));
+        jButtonHelp.setText("Help");
+        
+        jButtonHelp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonHelpActionPerformed(evt);
+            }
+        });
+        
+        /**END BUTTON SETUP**/
+        
+        /**ADDING COMPONENTS TO JPANEL**/
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                	.addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
-                	.addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
-                    .addComponent(jButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                	.addComponent(jButtonAdd, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                	.addComponent(jButtonConnect, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                    .addComponent(jButtonRestart, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                    .addComponent(jButtonAbout, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                    .addComponent(jButtonHelp, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                    .addComponent(jButtonEnd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
@@ -102,42 +159,68 @@ public class Window extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(141, 141, 141)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButtonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButtonConnect, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButtonRestart, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jButtonAbout, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButtonHelp, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButtonEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()))))));
-       
+        //PACK
         pack();
-
+        //SETSIZE
         setSize(APPLET_WIDTH, APPLET_HEIGHT);
+        
+        /**END ADDING COMPONENTS TO JPANEL**/
        
     }
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
+    
+    /**ACTIONS**/
+    private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {
        
        JOptionPane.showMessageDialog(null, "Click where you want the activity located.");
     }
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jButtonConnectActionPerformed(java.awt.event.ActionEvent evt) {
 
         JOptionPane.showMessageDialog(null, "Right click the predecessor activity to link the activities.");
     }
     
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jButtonRestartActionPerformed(java.awt.event.ActionEvent evt) {
 
         JOptionPane.showMessageDialog(null, "Network Diagram Cleared."); 
         Panel.restart(); 
         repaint();
     }
     
-    private void jButtonActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jButtonEndActionPerformed(java.awt.event.ActionEvent evt) {
 
         JOptionPane.showMessageDialog(null, "Application will close.");
         System.exit(0);
     }
+    
+    private void jButtonAboutActionPerformed(java.awt.event.ActionEvent evt) {
+
+        JOptionPane.showMessageDialog(null, "Created by\n"
+        		+ "Raquel Fierros    Andrew Resto    Aaron Gurrola\n"
+        		+"\nThe program is designed to process activity diagrams from user inputs.");
+        System.exit(0);
+    }
+    
+    private void jButtonHelpActionPerformed(java.awt.event.ActionEvent evt) {
+
+        JOptionPane.showMessageDialog(null, "Start by creating an activity node.\n"
+        		+ "Pressing any button, and it will create a dialogue box with information on the button.\n"
+        		+"To exit the program, press the End Application button.");
+        System.exit(0);
+    }
+    
+    /**END ACTIONS**/
     
     public static void main(String args[]) {
     	java.awt.EventQueue.invokeLater(new Runnable() {
@@ -146,4 +229,3 @@ public class Window extends javax.swing.JFrame {
             }
         });
     }
-}
