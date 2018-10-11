@@ -54,23 +54,30 @@ public class Panel extends javax.swing.JPanel {
                     	
                         String activityName = JOptionPane.showInputDialog("Enter the name of the activity: ");
                         
-                        if (!activityName.equals(null) && !activityName.replace(" ", "").equals("")) {
-
-                            n.setActivityName(activityName);
+                        if (activityName.equals(null) || activityName.replace(" ", "").equals("")) {
+                           
+                            JOptionPane.showMessageDialog(null, "Write a valid activity name.");
+                       }
+                        else
+                        {
+                        	 n.setActivityName(activityName);
                         }
                     } catch (Exception ex) {
+                    	
                         JOptionPane.showMessageDialog(null, "Write a valid activity name.");
                     }
                     
                     try{
-                		String activityDuration = JOptionPane.showInputDialog("Enter the duration of the activity:");
-                		int aDuration = Integer.parseInt(activityDuration);
-                		n.setActivityDuration(aDuration);
-                		n.setPoint(e.getPoint());
+			    
+                	String activityDuration = JOptionPane.showInputDialog("Enter the duration of the activity:");
+                	int aDuration = Integer.parseInt(activityDuration);
+                	n.setActivityDuration(aDuration);
+                	n.setPoint(e.getPoint());
                         nodes.add(n); // add new node to the list
-                	}catch(Exception ex){
-                        JOptionPane.showMessageDialog(null, "Enter an integer for the duration.");
                         
+                	}catch(Exception ex){
+                		
+                        JOptionPane.showMessageDialog(null, "Enter an integer for the duration.");
                     }
                 }
                 repaint(); 
@@ -216,8 +223,8 @@ public class Panel extends javax.swing.JPanel {
         }
         return null;
     }
-    
-	public static void restart() {
+	
+    public static void restart() {
 	connect.clear(); 
     	nodes.clear();
 	}
