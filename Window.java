@@ -1,5 +1,5 @@
-package netgraph;
 
+package netgraph;
 
 import java.util.ArrayList;
 import java.util.List;

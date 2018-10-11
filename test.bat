@@ -2,7 +2,7 @@ if not exist %~dp0\bin mkdir %~dp0\bin
 
 javac -d bin *.java
 
-cd %~dp0bin
+cd %~dp0\bin
 
 java netgraph.Window
 
@@ -12,4 +12,4 @@ cd ..
 
 del *.class REM delete from current path
 
-cls
+REM cls
