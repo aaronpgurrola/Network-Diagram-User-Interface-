@@ -8,7 +8,7 @@ public class Add {
     private Node destination;// Node destination
     private int duration;// Node duration
 
-    // Getters and Setters methds 
+    // Getter and Setter methods 
     
     public Node getPredecessor() {
         return predecessor;
