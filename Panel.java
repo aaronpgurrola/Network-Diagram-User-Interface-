@@ -36,14 +36,28 @@ public class Panel extends javax.swing.JPanel {
     public void setAdd(List<Add> connect) {
         this.connect = connect;
     }
-
+    
+    public boolean isValid(List<Node> nodes) {
+    	for (int i = 0; i < nodes.size(); i++) {
+    		if(nodes.get(i).isTail()) {
+    			if(!nodes.get(i).hasPredecessor()) {
+    				return false;
+    			}
+    		}
+    		else if (nodes.get(i).getProcessed()>1) {
+    			return false;
+    		}	
+    	}
+    	return true;
+    }
+    
     public Panel() {
     	
     	predecessor = null;
         destination = null;
         this.nodes = new ArrayList<>();
         this.connect = new ArrayList<>();
-
+        
         addMouseListener(new MouseAdapter()
         { 
             public void mousePressed(MouseEvent e)
@@ -56,30 +70,25 @@ public class Panel extends javax.swing.JPanel {
                     	
                         String activityName = JOptionPane.showInputDialog("Enter the name of the activity: ");
                         
-                        if (activityName.equals(null) || activityName.replace(" ", "").equals("")) {
-                           
-                            JOptionPane.showMessageDialog(null, "Write a valid activity name.");
-                       }
-                        else
-                        {
-                        	 n.setActivityName(activityName);
+                        if (!activityName.equals(null) && !activityName.replace(" ", "").equals("")) {
+
+                            n.setActivityName(activityName);
                         }
                     } catch (Exception ex) {
-                    	
                         JOptionPane.showMessageDialog(null, "Write a valid activity name.");
                     }
                     
                     try{
-			    
-                	String activityDuration = JOptionPane.showInputDialog("Enter the duration of the activity:");
-                	int aDuration = Integer.parseInt(activityDuration);
-                	n.setActivityDuration(aDuration);
-                	n.setPoint(e.getPoint());    
-                       nodes.add(n); // add new node to the list
-                        
+                		String activityDuration = JOptionPane.showInputDialog("Enter the duration of the activity:");
+                		int aDuration = Integer.parseInt(activityDuration);
+                		n.setActivityDuration(aDuration);
+                		n.setPoint(e.getPoint());
+                		if (nodes.isEmpty())
+                			n.setHead(true);
+                        nodes.add(n); // add new node to the list
                 	}catch(Exception ex){
-                		
                         JOptionPane.showMessageDialog(null, "Enter an integer for the duration.");
+                        
                     }
                 }
                 repaint(); 
@@ -115,12 +124,26 @@ public class Panel extends javax.swing.JPanel {
                         if (destination != null) {
                         	
                             Add a = new Add();
-                            
                             a.setPredecessor(predecessor);
                             a.setDestination(destination);
                             
-                            flag = false; 
+                            predecessor.add(destination);
+                            destination.doesHasPredecessor();
+                            flag = false;
+                            String duration = "";
+                            int d = -1;
+                            while (d == -1) {                                
+                                try {
+                                     duration = JOptionPane.showInputDialog("Enter the duration to get to next activity, if there is no duration enter 0.");
+                                     d = Integer.parseInt(duration);
+                                     
+                                } catch (Exception ex) {
+                                	JOptionPane.showMessageDialog(null, "Enter an integer for the duration.");
+                                }
+                               }
+                            a.setDuration(d);
                             connect.add(a);
+                            //predecessor.add(destination);
                             predecessor = null;
                             destination = null;
                         }
@@ -132,6 +155,7 @@ public class Panel extends javax.swing.JPanel {
                 repaint(); 
                 }
           } 
+
         }); 
     }
    
@@ -149,7 +173,8 @@ public class Panel extends javax.swing.JPanel {
             g.drawString(nodes.get(i).getActivityName(), nodes.get(i).getPoint().x + 20, nodes.get(i).getPoint().y + 25);
             g.drawString("" + nodes.get(i).getActivityDuration(), nodes.get(i).getPoint().x + 20, nodes.get(i).getPoint().y + 43);
             g.setColor(Color.BLUE);
-            g.drawOval(nodes.get(i).getPoint().x, nodes.get(i).getPoint().y, 50, 50);    
+            g.drawOval(nodes.get(i).getPoint().x, nodes.get(i).getPoint().y, 50, 50);
+                      
         }
         
         // Drawing Arrows
@@ -164,6 +189,7 @@ public class Panel extends javax.swing.JPanel {
             p2.y = connect.get(i).getPredecessor().getPoint().y;
                           
             g.setColor(Color.DARK_GRAY);
+            g.drawString(String.valueOf(connect.get(i).getDuration()), (p1.x+p2.x)/2,(p1.y+p2.y)/2);
            
             g.setColor(Color.black);
             
@@ -187,8 +213,7 @@ public class Panel extends javax.swing.JPanel {
             angle = Math.atan(ty/tx);
 
             if(tx < 0)
-            { 
-            	// if negative add 180 degrees   
+            { // if negative add 180 degrees
                angle += Math.PI;
             }
 
@@ -225,8 +250,8 @@ public class Panel extends javax.swing.JPanel {
         }
         return null;
     }
-	
-    public static void restart() {
+    
+	public static void restart() {
 	connect.clear(); 
     	nodes.clear();
 	}
