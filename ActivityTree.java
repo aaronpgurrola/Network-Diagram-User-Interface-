@@ -40,10 +40,7 @@ class ActivityTree {
         System.out.println(parentsS.length());
 
         // Create.
-        Node activity = new Node( 
-            nameS, 
-            duration, 
-            new ArrayList<String>(Arrays.asList( parentsS.split(",") )) );
+        Node activity = new Node();
         
         // update before inserting the new activity.
         updateRelationships( activity ); 
