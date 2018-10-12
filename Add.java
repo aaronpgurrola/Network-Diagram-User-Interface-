@@ -1,5 +1,4 @@
-
-
+package netgraph;
 public class Add {
     
     public Add() {
@@ -8,8 +7,9 @@ public class Add {
     private Node predecessor; // Node predecessor
     private Node destination;// Node destination
     private int duration;// Node duration
-    //getters setters
 
+    // Getter and Setter methods 
+    
     public Node getPredecessor() {
         return predecessor;
     }
@@ -33,5 +33,4 @@ public class Add {
     public void setDuration(int duration) {
         this.duration = duration;
     }
-    
 }

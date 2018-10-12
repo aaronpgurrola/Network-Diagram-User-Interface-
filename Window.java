@@ -1,18 +1,10 @@
-
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
-import java.awt.Color;
 
 
 public class Window extends javax.swing.JFrame {
-
-    static final Color COLOR_WINDOW_BACKGROUND = new java.awt.Color(153, 153, 153);
-    static final Color COLOR_BUTTONS = new java.awt.Color(51, 204, 255);
-    
-    // All of our nodes
-    ActivityTree tree;
-
+	
     private javax.swing.JButton jButtonAdd;
     private javax.swing.JButton jButtonConnect;
     private javax.swing.JButton jButtonRestart;
@@ -23,29 +15,32 @@ public class Window extends javax.swing.JFrame {
     
     private javax.swing.JPanel  jPanel1;
     
-    private static final int APPLET_WIDTH = 800, APPLET_HEIGHT = 600;
+    public List <Node> nodes;
+    public List <Add> connect;
     
-
+    private int APPLET_WIDTH = 800, APPLET_HEIGHT = 600;
+    
     public Window() {
         
-        tree = new ActivityTree();
-
         initComponents();
     }
 
     private void initComponents() {
     	
     	//jPanel Creation
-        jPanel1 = new Panel( tree );
+        jPanel1 = new Panel();
         
         //jButton Creation
-        jButtonAdd =        new javax.swing.JButton();
-        jButtonConnect =    new javax.swing.JButton();
-        jButtonRestart =    new javax.swing.JButton();
-        jButtonEnd =        new javax.swing.JButton();
-        jButtonHelp =       new javax.swing.JButton();
-        jButtonAbout =      new javax.swing.JButton();
-        jButtonProcess =    new javax.swing.JButton();
+        jButtonAdd = new javax.swing.JButton();
+        jButtonConnect = new javax.swing.JButton();
+        jButtonRestart = new javax.swing.JButton();
+        jButtonEnd = new javax.swing.JButton();
+        jButtonHelp = new javax.swing.JButton();
+        jButtonAbout = new javax.swing.JButton();
+        
+        //Arraylist creation
+        this.nodes = new ArrayList<>();
+        this.connect = new ArrayList<>();
         
         //EXIT ON CLOSE as Default
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -54,7 +49,7 @@ public class Window extends javax.swing.JFrame {
         setTitle("Network Diagram");
         
         //Set background
-        jPanel1.setBackground( COLOR_WINDOW_BACKGROUND );
+        jPanel1.setBackground(new java.awt.Color(153, 153, 153));
         
         /**LAYOUT**/
         
@@ -80,7 +75,7 @@ public class Window extends javax.swing.JFrame {
         /*All buttons setup with setBackground, setText, and configured ActionListener*/
         
         //End Application Button
-        jButtonEnd.setBackground(COLOR_BUTTONS);
+        jButtonEnd.setBackground(new java.awt.Color(51, 204, 255));
         jButtonEnd.setText("End Application");
         
         jButtonEnd.addActionListener(new java.awt.event.ActionListener() {
@@ -90,7 +85,7 @@ public class Window extends javax.swing.JFrame {
         });
         
         //Restart Button
-        jButtonRestart.setBackground(COLOR_BUTTONS);
+        jButtonRestart.setBackground(new java.awt.Color(51, 204, 255));
         jButtonRestart.setText("Restart");
         
         jButtonRestart.addActionListener(new java.awt.event.ActionListener() {
@@ -100,27 +95,27 @@ public class Window extends javax.swing.JFrame {
         });
         
         //Add Activity Button
-        jButtonAdd.setBackground(COLOR_BUTTONS);
+        jButtonAdd.setBackground(new java.awt.Color(51, 204, 255));
         jButtonAdd.setText("Add Activity");
         
         jButtonAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonAddActionPerformed();
+                jButtonAddActionPerformed(evt);
             }
         });
         
         //Connect Activities Button
-            // jButtonConnect.setBackground(COLOR_BUTTONS);
-            // jButtonConnect.setText("Connect Activities");
-            
-            // jButtonConnect.addActionListener(new java.awt.event.ActionListener() {
-            //     public void actionPerformed(java.awt.event.ActionEvent evt) {
-            //         jButtonConnectActionPerformed(evt);
-            //     }
-            // });
+        jButtonConnect.setBackground(new java.awt.Color(51, 204, 255));
+        jButtonConnect.setText("Connect Activities");
+        
+        jButtonConnect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonConnectActionPerformed(evt);
+            }
+        });
         
       //About Button
-        jButtonAbout.setBackground(COLOR_BUTTONS);
+        jButtonAbout.setBackground(new java.awt.Color(51, 204, 255));
         jButtonAbout.setText("About");
         
         jButtonAbout.addActionListener(new java.awt.event.ActionListener() {
@@ -129,8 +124,8 @@ public class Window extends javax.swing.JFrame {
             }
         });
         
-        //Help Button
-        jButtonHelp.setBackground(COLOR_BUTTONS);
+        //About Button
+        jButtonHelp.setBackground(new java.awt.Color(51, 204, 255));
         jButtonHelp.setText("Help");
         
         jButtonHelp.addActionListener(new java.awt.event.ActionListener() {
@@ -139,36 +134,23 @@ public class Window extends javax.swing.JFrame {
             }
         });
         
-      //Process Button
-        jButtonProcess.setBackground(COLOR_BUTTONS);
-        jButtonProcess.setText("Process");
-        
-        jButtonProcess.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonProcessActionPerformed(evt);
-            }
-        });
-        
-        
         /**END BUTTON SETUP**/
         
         /**ADDING COMPONENTS TO JPANEL**/
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
-        
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                 	.addComponent(jButtonAdd, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
-                	    // .addComponent(jButtonConnect, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
-                	.addComponent(jButtonProcess, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                	.addComponent(jButtonConnect, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
                     .addComponent(jButtonRestart, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
                     .addComponent(jButtonAbout, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
                     .addComponent(jButtonHelp, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
                     .addComponent(jButtonEnd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
-        
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
@@ -180,17 +162,15 @@ public class Window extends javax.swing.JFrame {
                                 .addGap(141, 141, 141)
                                 .addComponent(jButtonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    // .addComponent(jButtonConnect, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    // .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButtonProcess, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButtonConnect, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButtonRestart, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButtonRestart, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButtonAbout, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButtonAbout, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButtonHelp, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButtonHelp, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButtonEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jButtonEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()))))));
         //PACK
         pack();
@@ -202,116 +182,51 @@ public class Window extends javax.swing.JFrame {
     }
     
     /**ACTIONS**/
-    private void jButtonAddActionPerformed(){
-        jButtonAddActionPerformed( "", "", "10" );
-    } 
-    private void jButtonAddActionPerformed( String nameS, String parentsS, String durationS ) {
+    private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {
        
-        // We need name duration and parents field
-         javax.swing.JTextField name =      new javax.swing.JTextField( nameS );
-         javax.swing.JTextField duration =  new javax.swing.JTextField( durationS );
-         javax.swing.JTextField parents =   new javax.swing.JTextField( parentsS );
-
-        final javax.swing.JComponent[] inputs = new javax.swing.JComponent[] {
-                new javax.swing.JLabel("Name"), name,
-                new javax.swing.JLabel("Dependencies"), parents,
-                new javax.swing.JLabel("Duration"), duration
-        };
-       
-
-        int result = JOptionPane.showConfirmDialog(this, inputs, "Add Activity", JOptionPane.PLAIN_MESSAGE);
-        nameS = name.getText();
-        durationS = duration.getText();
-        parentsS = parents.getText();
-        
-        if (result == JOptionPane.OK_OPTION) {
-            // Add activity
-            String err = "";
-            switch( tree.AddActivity( nameS, durationS, parentsS ) ) {
-                case ActivityTree.CREATE_OK: 
-                    repaint();
-                    return;
-
-                case ActivityTree.CREATE_NONAME:
-                    err = "PLEASE PROVIDE A NAME.";
-                    break;
-                
-                case ActivityTree.CREATE_EXISTS:
-                    err = "THIS ACTIVITY EXISTS.";
-                    break;
-                
-                case ActivityTree.CREATE_DURATION:
-                    err = "INVALID DURATION TYPE.";
-                    break;
-            }
-
-            JOptionPane.showMessageDialog( this, err, "HEY!! We got a PROBLEM.", JOptionPane.ERROR_MESSAGE );
-            jButtonAddActionPerformed( nameS, durationS, parentsS );
-
-        } else {
-            // nothing for now. exit.
-        }
-
+       JOptionPane.showMessageDialog(null, "Click where you want the activity located.");
     }
 
-    // private void jButtonConnectActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jButtonConnectActionPerformed(java.awt.event.ActionEvent evt) {
 
-    //     JOptionPane.showMessageDialog(this, "Right click the predecessor activity to link the activities.");
-    // }
+        JOptionPane.showMessageDialog(null, "Right click the predecessor activity to link the activities.");
+    }
     
     private void jButtonRestartActionPerformed(java.awt.event.ActionEvent evt) {
 
-        JOptionPane.showMessageDialog(this, "Network Diagram Cleared."); 
-        tree.clear();
-
+        JOptionPane.showMessageDialog(null, "Network Diagram Cleared."); 
+        Panel.restart(); 
         repaint();
     }
     
     private void jButtonEndActionPerformed(java.awt.event.ActionEvent evt) {
 
-        JOptionPane.showMessageDialog(this, "Application will close.");
+        JOptionPane.showMessageDialog(null, "Application will close.");
         System.exit(0);
     }
     
     private void jButtonAboutActionPerformed(java.awt.event.ActionEvent evt) {
 
-        JOptionPane.showMessageDialog(this, "Created by\n"
+        JOptionPane.showMessageDialog(null, "Created by\n"
         		+ "Raquel Fierros    Andrew Resto    Aaron Gurrola\n"
         		+"\nThe program is designed to process activity diagrams from user inputs.");
     }
     
     private void jButtonHelpActionPerformed(java.awt.event.ActionEvent evt) {
 
-        JOptionPane.showMessageDialog(this, "Start by creating an activity node."
-        		+"\nNodes which don't have dependencies are heads.\n"
-                + "Clicking add activity allows you to create an activity.\n"
-                + "Clicking process allows the program to finalyze and analyze the network.\n"
+        JOptionPane.showMessageDialog(null, "Start by creating an activity node."
+        		+"\nThe first node created is the head.\n"
+        		+ "Pressing any button, and it will create a dialogue box with information on the button.\n"
         		+"To exit the program, press the End Application button.");
-    }
-    
-    private void jButtonProcessActionPerformed(java.awt.event.ActionEvent evt) {
-        
-        Processor p = new Processor( tree );
-
-        if( !p.hasNoLoops() ){
-            JOptionPane.showMessageDialog( this, "We found a loop in your network.\n You should fix that.", "HEY!! We got a PROBLEM.", JOptionPane.ERROR_MESSAGE );
-        } else if( !p.hasAllConnections() ){
-            JOptionPane.showMessageDialog( this, "Looks like you gave us a network with a point without a connection.\n That's not how networks work.\n Fix it.", "HEY!! We got a PROBLEM.", JOptionPane.ERROR_MESSAGE );
-        } else {
-            p.buildPaths();   
-            JOptionPane.showMessageDialog(this, p.outputString());
-        }
     }
     
     /**END ACTIONS**/
     
     public static void main(String args[]) {
-
     	java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Window().setVisible(true);
             }
         });
-
     }
 }
