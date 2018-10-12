@@ -57,7 +57,6 @@ public class Processor {
 		}
 	}
 	
-	
 	public String outputString() {
 		StringBuilder sb=new StringBuilder();		
 		for( Path path : paths ){ 
