@@ -1,38 +1,103 @@
-package netgraph;
 import java.awt.Point;
+import java.util.List;
+import java.util.ArrayList;
+
 
 public class Node {
     
-    public Node() {
-        point = new Point();
-    }
-    private String activityName; // name of the activity
-    private Point point; // location of the node 
-    private int activityDuration; 
+    public Node( String name, int duration, ArrayList<String> parents ) { 
+        
+        if( name.isEmpty() ){
+            throw new java.lang.RuntimeException("Name shouldn't be empty.");
+        }
 
-    // Getter and Setter methods 
+        this.name =     name;
+        this.duration = duration;
+        this.parents =  parents;
+        parents.remove("");
+    }
+    
+    private int duration;
+    private String name;
+    private List<String> parents;
+    private List<String> children = new ArrayList<>();
+    
+    //getters setters
+
+    // NAME
     public void setActivityName(String activityName) {
-        this.activityName = activityName;
+        if(  !activityName.isEmpty() ) name = activityName;
     }
-
     public String getActivityName() {
-        return activityName;
+        return name;
     }
-    
+
+    // DURATION
     public void setActivityDuration(int activityDuration) {
-        this.activityDuration = activityDuration;
+        duration = activityDuration;
     }
-
     public int getActivityDuration() {
-        return activityDuration;
+        return duration;
     }
     
-    public Point getPoint() {
-        return point;
+    public boolean isTail() {
+        return children.isEmpty();
     }
 
-    public void setPoint(Point point) {
-        this.point = point;
+    public boolean isHead() {
+    	return parents.isEmpty();
+    }
+    
+    public boolean addParent(String name) {
+    	if( !parents.contains(name) ){
+            parents.add(name);
+            return true;
+        }
+        return false;
+    }
+
+    // public void removeParent(String name) {
+
+    // }
+
+    public boolean addChild(String name){
+    	if( !children.contains(name) ){
+            children.add(name);
+            return true;
+        }
+        return false;
+    }
+
+    // public void removeChild(String name){
+
+    // }
+
+    public boolean hasParents() {
+    	return !parents.isEmpty();
+    }
+
+    public boolean hasChildren() {
+    	return !children.isEmpty();
+    }
+
+    public List<String> getParents(){
+        List<String> list = new ArrayList<>();
+        list.addAll( parents );
+        return list;
+    }
+
+    public int parentCount(){ return parents.size(); }
+
+    public List<String> getChildren(){
+        List<String> list = new ArrayList<>();
+        list.addAll( children );
+        return list;
+    }
+
+    public int childrenCount(){ return children.size(); }
+
+    public String toString(){
+        return "name:" + name + ", duration:" + duration + " children:" + children + " parents:" + parents; 
     }
     
 }
