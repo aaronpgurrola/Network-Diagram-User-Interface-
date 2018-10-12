@@ -4,7 +4,7 @@ javac -d bin *.java
 
 cd %~dp0\bin
 
-java netgraph.Window
+java Window
 
 del *.class
 
