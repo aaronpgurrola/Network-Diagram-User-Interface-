@@ -41,6 +41,22 @@ public class Processor {
 		return true;
 	} 
 	
+	public boolean parentFinder()
+	{
+		for(Node node: tree.getNodes())
+		{
+			for(String parent: node.getParents())
+			{
+				if(!tree.activityExists(parent))
+				{
+					return false;
+				}
+				
+				return true;
+			}
+		}
+	}
+	
 	
 	public String outputString() {
 		StringBuilder sb=new StringBuilder();		
@@ -100,9 +116,5 @@ public class Processor {
 		}
 		
 	}
-	
-	
-
-	
 	
 }
