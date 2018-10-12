@@ -325,5 +325,4 @@ class NodeGrid {
         return new Rectangle( x, y, cellWidth, cellHeight );
     }
 
-	}
-}
+}}
