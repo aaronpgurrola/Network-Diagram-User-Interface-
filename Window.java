@@ -297,7 +297,12 @@ public class Window extends javax.swing.JFrame {
             JOptionPane.showMessageDialog( this, "We found a loop in your network.\n You should fix that.", "HEY!! We got a PROBLEM.", JOptionPane.ERROR_MESSAGE );
         } else if( !p.hasAllConnections() ){
             JOptionPane.showMessageDialog( this, "Looks like you gave us a network with a point without a connection.\n That's not how networks work.\n Fix it.", "HEY!! We got a PROBLEM.", JOptionPane.ERROR_MESSAGE );
-        } else {
+        } 
+        else if(!p.parentFinder())
+        {
+        	JOptionPane.showMessageDialog( this, "Parent node is not found in network path. \n That's not how networks work.\n Fix it.", "HEY!! We got a PROBLEM.", JOptionPane.ERROR_MESSAGE );
+        }
+        else {
             p.buildPaths();   
             JOptionPane.showMessageDialog(this, p.outputString());
         }
