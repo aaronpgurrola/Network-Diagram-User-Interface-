@@ -90,8 +90,6 @@ public class Node {
         list.addAll( children );
         return list;
     }
-    
-  
 
     public void setPoint(Point point) {
         this.point = point;
