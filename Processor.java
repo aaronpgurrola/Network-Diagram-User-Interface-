@@ -43,18 +43,23 @@ public class Processor {
 	
 	public boolean parentFinder()
 	{
+		boolean flag = true;
+		
 		for(Node node: tree.getNodes())
 		{
 			for(String parent: node.getParents())
 			{
 				if(!tree.activityExists(parent))
 				{
-					return false;
+					flag = false;
 				}
-				
-				return true;
+				else
+				{
+					flag = true; 
+				}
 			}
 		}
+		return flag;
 	}
 	
 	public String outputString() {
