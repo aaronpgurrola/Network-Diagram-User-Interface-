@@ -16,11 +16,7 @@ public class Node {
         this.parents =  parents;
         parents.remove("");
     }
-    
-    public Node() {
-        
-    }
-
+	
     private Point point; // location of the node 
     private int duration;
     private String name;
