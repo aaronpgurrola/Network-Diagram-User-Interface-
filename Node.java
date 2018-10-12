@@ -4,24 +4,19 @@ import java.util.ArrayList;
 
 
 public class Node {
-    
-    public Node( String name, int duration, ArrayList<String> parents ) { 
-        
-        if( name.isEmpty() ){
-            throw new java.lang.RuntimeException("Name shouldn't be empty.");
-        }
-        point = new Point();
-        this.name =     name;
-        this.duration = duration;
-        this.parents =  parents;
-        parents.remove("");
-    }
 	
-    private Point point; // location of the node 
-    private int duration;
-    private String name;
-    private List<String> parents;
-    private List<String> children = new ArrayList<>();
+	
+	  public Node() {
+	        point = new Point();
+	    }
+	  
+	    private Point point; // location of the node 
+
+    
+	    private int duration;
+	    private String name;
+	    private List<String> parents;
+	    private List<String> children = new ArrayList<>();
     
     //getters setters
 
@@ -86,6 +81,7 @@ public class Node {
         list.addAll( children );
         return list;
     }
+    
 
     public void setPoint(Point point) {
         this.point = point;
