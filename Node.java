@@ -1,101 +1,96 @@
 import java.awt.Point;
 import java.util.List;
 import java.util.ArrayList;
-
-
 public class Node {
-	
-	
-	  public Node() {
-	        point = new Point();
-	    }
-	  
-	    private Point point; // location of the node 
-
     
-	    private int duration;
-	    private String name;
-	    private List<String> parents;
-	    private List<String> children = new ArrayList<>();
+    public Node() {
+        point = new Point();
+    }
+    private int activityDuration;
+    private String activityName; // name of the activity
+    private Point point; // location of the node 
+     
+    public int predecessors;
+    public List <Node> children = new ArrayList<>();
+    private boolean isHead = false;
+    private short processed = 0;
+    private boolean hasPredecessor = false;
+    
+    
     
     //getters setters
-
-    // NAME
     public void setActivityName(String activityName) {
-        if(  !activityName.isEmpty() ) name = activityName;
+        this.activityName = activityName;
     }
+
     public String getActivityName() {
-        return name;
+        return activityName;
     }
-
-    // DURATION
+    
+    // .
     public void setActivityDuration(int activityDuration) {
-        duration = activityDuration;
+        this.activityDuration = activityDuration;
     }
+
     public int getActivityDuration() {
-        return duration;
+        return activityDuration;
     }
     
-    public boolean isTail() {
-        return children.isEmpty();
-    }
 
-    public boolean isHead() {
-    	return parents.isEmpty();
+    public Point getPoint() {
+        return point;
     }
-    
-    public boolean addParent(String name) {
-    	if( !parents.contains(name) ){
-            parents.add(name);
-            return true;
-        }
-        return false;
-    }
-
-    public boolean addChild(String name){
-    	if( !children.contains(name) ){
-            children.add(name);
-            return true;
-        }
-        return false;
-    }
-   
-    public boolean hasParents() {
-    	return !parents.isEmpty();
-    }
-
-    public boolean hasChildren() {
-    	return !children.isEmpty();
-    }
-
-    public List<String> getParents(){
-        List<String> list = new ArrayList<>();
-        list.addAll( parents );
-        return list;
-    }
-
-    public int parentCount(){ return parents.size(); }
-
-    public List<String> getChildren(){
-        List<String> list = new ArrayList<>();
-        list.addAll( children );
-        return list;
-    }
-    
 
     public void setPoint(Point point) {
         this.point = point;
     }
-
-    public int childrenCount(){ return children.size(); }
-
-    public String toString(){
-        return "name:" + name + ", duration:" + duration + " children:" + children + " parents:" + parents; 
+    
+    public void setHead(boolean isHead) {
+    	this.isHead = isHead; 
     }
-
-	public Point getPoint() {
-		
-		return point;
-	}
+    
+    public boolean isTail() {
+    	return (children.isEmpty());
+    }
+    
+    public void add(Node n) {
+    	children.add(n);
+    }
+    
+    public void reset() {
+    	processed = 0;
+    }
+    
+    public void process() {
+    	processed++;
+    }
+    
+    public int getProcessed() {
+    	return processed;
+    }
+    
+    public void doesHasPredecessor() {
+    	hasPredecessor = true;
+    }
+    
+    public boolean hasPredecessor() {
+    	return hasPredecessor;
+    }
+    
+    public int getPredecessors() {
+    	return predecessors;
+    }
+    
+    public void incPredecessors() {
+    	predecessors++;
+    }
+    
+    public boolean getHead() {
+    	return isHead;
+    }
+    
+    public boolean hasChildren() {
+    	return (!children.isEmpty());
+    }
     
 }
