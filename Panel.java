@@ -4,32 +4,26 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.geom.Rectangle2D;
-import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JOptionPane;
 
 
-/**
- * 
- * This panel will draw all the nodes.
- * 
- */
-public class Panel extends javax.swing.JPanel {    
-    
-    public ActivityTree tree;
-    
+public class Panel extends javax.swing.JPanel {
     
     boolean flag = false;
     Node predecessor;
     Node destination;
+    
     public static List <Node> nodes;
     public static List <Add> connect;
-
+    
+    
+    Processor pro = new Processor(nodes);
+    
+    
     public List<Node> getNodes() {
         return nodes;
     }
@@ -46,16 +40,17 @@ public class Panel extends javax.swing.JPanel {
         this.connect = connect;
     }
     
+    
+    
+    
     /**PANEL**/
-    public Panel( ActivityTree tree ) {
-        
-        this.tree = tree;
-        
-        predecessor = null;
+    public Panel() {
+    	
+    	predecessor = null;
         destination = null;
         this.nodes = new ArrayList<>();
         this.connect = new ArrayList<>();
-
+        
         addMouseListener(new MouseAdapter()
         { 
             public void mousePressed(MouseEvent e)
@@ -68,29 +63,24 @@ public class Panel extends javax.swing.JPanel {
                     	
                         String activityName = JOptionPane.showInputDialog("Enter the name of the activity: ");
                         
-                        if (activityName.equals(null) || activityName.replace(" ", "").equals("")) {
-                           
-                            JOptionPane.showMessageDialog(null, "Write a valid activity name.");
-                       }
-                        else
-                        {
-                        	 n.setActivityName(activityName);
+                        if (!activityName.equals(null) && !activityName.replace(" ", "").equals("")) {
+
+                            n.setActivityName(activityName);
                         }
                     } catch (Exception ex) {
-                    	
                         JOptionPane.showMessageDialog(null, "Write a valid activity name.");
                     }
                     
                     try{
-                    	
                 		String activityDuration = JOptionPane.showInputDialog("Enter the duration of the activity:");
                 		int aDuration = Integer.parseInt(activityDuration);
                 		n.setActivityDuration(aDuration);
                 		n.setPoint(e.getPoint());
+                		/*if (nodes.isEmpty())
+                			n.setHead(true);*/
                         nodes.add(n); // add new node to the list
-                        
+                        System.out.println("Size of nodes: " + nodes.size());
                 	}catch(Exception ex){
-                		
                         JOptionPane.showMessageDialog(null, "Enter an integer for the duration.");
                         
                     }
@@ -128,12 +118,28 @@ public class Panel extends javax.swing.JPanel {
                         if (destination != null) {
                         	
                             Add a = new Add();
-                            
                             a.setPredecessor(predecessor);
                             a.setDestination(destination);
                             
-                            flag = false; 
+                            predecessor.add(destination);
+                            destination.incPredecessors();
+                            destination.doesHasPredecessor();
+                            
+                            flag = false;
+                            String duration = "";
+                            int d = -1;
+                            /**while (d == -1) {                                
+                                try {
+                                     duration = JOptionPane.showInputDialog("Enter the duration to get to next activity, if there is no duration enter 0.");
+                                     d = Integer.parseInt(duration);
+                                     
+                                } catch (Exception ex) {
+                                	JOptionPane.showMessageDialog(null, "Enter an integer for the duration.");
+                                }
+                               }**/
+                            a.setDuration(d);
                             connect.add(a);
+                            //predecessor.add(destination);
                             predecessor = null;
                             destination = null;
                         }
@@ -142,9 +148,11 @@ public class Panel extends javax.swing.JPanel {
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "Error.");
                 }
+                //test
                 repaint(); 
                 }
           } 
+
         }); 
     }
    
@@ -162,7 +170,8 @@ public class Panel extends javax.swing.JPanel {
             g.drawString(nodes.get(i).getActivityName(), nodes.get(i).getPoint().x + 20, nodes.get(i).getPoint().y + 25);
             g.drawString("" + nodes.get(i).getActivityDuration(), nodes.get(i).getPoint().x + 20, nodes.get(i).getPoint().y + 43);
             g.setColor(Color.BLUE);
-            g.drawOval(nodes.get(i).getPoint().x, nodes.get(i).getPoint().y, 50, 50);    
+            g.drawOval(nodes.get(i).getPoint().x, nodes.get(i).getPoint().y, 50, 50);
+                      
         }
         
         // Drawing Arrows
@@ -177,6 +186,7 @@ public class Panel extends javax.swing.JPanel {
             p2.y = connect.get(i).getPredecessor().getPoint().y;
                           
             g.setColor(Color.DARK_GRAY);
+            //g.drawString(String.valueOf(connect.get(i).getDuration()), (p1.x+p2.x)/2,(p1.y+p2.y)/2);
            
             g.setColor(Color.black);
             
@@ -200,8 +210,7 @@ public class Panel extends javax.swing.JPanel {
             angle = Math.atan(ty/tx);
 
             if(tx < 0)
-            { 
-            	// if negative add 180 degrees   
+            { // if negative add 180 degrees
                angle += Math.PI;
             }
 
@@ -227,6 +236,7 @@ public class Panel extends javax.swing.JPanel {
             g.drawLine (p2.x, p2.y, point.x, point.y);  
         }
     }
+   
     public Node getNodeXY(int x, int y) {
         for (int i = 0; i < nodes.size(); i++) {
             System.out.println(x + "x  nod"+ nodes.get(i).getPoint().x);
@@ -237,92 +247,9 @@ public class Panel extends javax.swing.JPanel {
         }
         return null;
     }
-
-
-/*
-    We got a grid here.
-    It basically allows us to generate a list of drawable nodes.
-    The positions of these drawable nodes will not be screen coordinates,
-        the positions will be the points on a grid.
-        Their screen positions depend on the dimensions calculated in NodeGrid.cellWidth/Height
-        Look at draw node.
-    Or you can get the screen coordinates using the NodeGrid get DrawableNode Screen Pos.
-*/
-class NodeGrid {
-
-    protected class DrawableNode {
-        public Node node;
-        final public Point point;
-
-        public DrawableNode( Node node, Point point ){
-            this.node = node;
-            this.point = point;
-        }
-    }
-
-    // in the future, spots may be better referencing the drawable node.
-    private boolean[][] spots;
-    public List<DrawableNode> nodes = new ArrayList<>();
-    public int padding = 0;
-    public int cellWidth = 0;
-    public int cellHeight = 0;
-    public int sepWidth = 0;
-    public int sepHeight = 0;
-
-    public NodeGrid( int size, int padding, int sep ){
-        spots = new boolean[size][size];
-        this.padding = padding;
-        this.sepHeight = sep;
-        this.sepWidth = sep;
-    }
-
-    protected NodeGrid build( ActivityTree tree, Graphics g, Font font ){
-        List<Node> nodes = tree.getNodes();
-        buildPositions( tree, nodes );
-        String longString = longestString(  nodes ) + "@!#$";
-
-        Rectangle2D rec = font.createGlyphVector(
-                g.getFontMetrics().getFontRenderContext(), 
-                longString).getVisualBounds();
-        
-        cellHeight =(int)rec.getHeight()*(2) + padding;
-        cellWidth = (int)rec.getWidth() + padding;
-        return this;
-    }
-
-    private String longestString( List<Node> nodes ){
-        String longest = "";
-        for( Node node : nodes ){
-            if( node.getActivityName().length() > longest.length() ){
-                longest = node.getActivityName();
-            }
-        }
-
-        return longest;
-    }    
-
-    private void buildPositions( ActivityTree tree, List<Node> nodes ){
-        for( Node node : tree.getNodes() ){
-            int column = Math.min( tree.size()-1, tree.parentCountToRoots( node ));
-            int row = 0;
-            System.out.println("tree size:" + tree.size());
-            for( int j = 0; j < tree.size(); j ++ ){
-                if( !(spots[column][j]) ){
-                    spots[column][j] = true;
-                    row = j;
-                    break;
-                }
-            }
-            
-            this.nodes.add( new DrawableNode( node, new Point( column, row ) ) );
-        }
-    }
-
-    public Rectangle2D  screenBounds( DrawableNode node ){
-        int x = node.point.x * cellWidth  + node.point.x * sepWidth;
-        int y = node.point.y * cellHeight + node.point.y * sepHeight;
-
-        return new Rectangle( x, y, cellWidth, cellHeight );
-    }
-
-}}
+    
+	public static void restart() {
+	connect.clear(); 
+    	nodes.clear();
+	}
+}
