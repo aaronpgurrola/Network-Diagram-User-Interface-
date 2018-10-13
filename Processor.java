@@ -1,124 +1,128 @@
 import java.util.List;
+
+import javax.swing.JOptionPane;
+
 import java.util.ArrayList;
 
 public class Processor {
-	private List<Path> paths;
-	private ActivityTree tree;
+	public List <Node> nodes;
+	public List <Path> paths;
+	public List <Node> heads;
 	
-	Processor( ActivityTree tree ){
+	Processor(List <Node> nodes){
+		this.nodes = nodes;
 		paths = new ArrayList<>();
-		this.tree = tree;
+		heads = new ArrayList<>();
 	}
 	
-	// Returns trOO if all nodes have a connection.
-	public boolean hasAllConnections() {
-		for( Node node : tree.getNodes() ){
-			if( node.isHead() && node.isTail() ) return false;
-		}
-		return true;
-	}
-
-	public boolean hasNoLoops(){
-		for( Node node : tree.getNodes() ){ 
-			if( !hasNoLoops( new ArrayList<Node>(), node ) )
-				return false;
-		}
-		return true;
-	}
-
-	private boolean hasNoLoops( List<Node> path, Node current ){
-		// this shouldn't be in the path yet.
-		if( path.contains( current ) ) return false; 
-		// this is the tail, we're good to pass.
-		if( current.isTail() ) return true;
-		// else continue down path.
-		path.add( current );
-		for( Node child : tree.getChildrenOf( current ) ){
-			if( !hasNoLoops( path, child ) ){ return false; }
-		}
-		path.remove( current );
-		// no child had loops, pass this element.
-		return true;
-	} 
-	
-	public boolean parentFinder()
-	{
-		boolean flag = true;
-		
-		for(Node node: tree.getNodes())
-		{
-			for(String parent: node.getParents())
-			{
-				if(!tree.activityExists(parent))
-				{
-					flag = false;
-				}
-				else
-				{
-					flag = true; 
-				}
+	private void buildHeads() {
+		System.out.println("size of nodes = "+Panel.nodes.size());
+		for (int i = 0; i < Panel.nodes.size(); i++) {
+			//System.out.println((!Panel.nodes.get(i).hasPredecessor())+" + "+i+"Activity name: "+Panel.nodes.get(i).getActivityName());
+			if(!Panel.nodes.get(i).hasPredecessor()) {
+				System.out.println(i);
+				heads.add((Panel.nodes.get(i)));
 			}
 		}
-		return flag;
+	}
+	
+	public boolean isConnected() {
+		for (int i = 0; i < Panel.nodes.size();i++) {
+			if (!Panel.nodes.get(i).hasPredecessor()) {
+				if (Panel.nodes.get(i).isTail())
+					return false;
+			} 
+		}
+		return true;
+	}
+	
+	public boolean validHead() {
+		return (!Panel.nodes.get(0).hasPredecessor());
 	}
 	
 	public String outputString() {
-		StringBuilder sb=new StringBuilder();		
-		for( Path path : paths ){ 
-			sb.append( System.getProperty("line.separator") );
-			sb.append( path );
+		String outputString = "";
+		for(int i = 0; i < paths.size(); i++) {
+			outputString+=paths.get(i).toString();
 		}
-		return sb.toString();
-	}
-
-	public void buildPaths() {
-		if( tree.isEmpty() ) return;
-		this.paths.clear();
-
-		System.out.println("we're about to build.");
-		for( Node node : tree.getNodes() ){
-			// Only generate full paths. Paths which start with a head.
-			if( node.isHead() ){ buildPaths( node, new ArrayList<Node>() ); }
-		}
-
-		// Order these paths.
-		java.util.Collections.sort(paths, new PathSorter()); 
+		return outputString;
 	}
 	
-	private void buildPaths( Node current, ArrayList<Node> builtPath ) {
-		
-		if( current.isTail() ) {
-			
-			// add the full path to the list of paths
+	
+	
+	
+	
+	
+	public void buildPaths() {
+		if(!isConnected()) {
+			JOptionPane.showMessageDialog(null, "Not connected.");
+		}
+		else if (!validHead()) {
+			JOptionPane.showMessageDialog(null, "Invalid head.");
+			return;
+		}
+		else if (!Panel.nodes.get(0).hasChildren()) {
 			Path p = new Path();
-			
-			builtPath.add( current );
-
-			for( int i = 0; i < builtPath.size(); i ++  ) {
-				p.add( builtPath.get(i) );
-			}
-			
-			System.out.println("We have a path");
-			System.out.println(p.path.size());
-			System.out.println(p.toString());
-			
-			paths.add( p );
-			
-			builtPath.remove( current );
-
-			return; 
+			p.add(Panel.nodes.get(0));
+			return;
 		} else {
-			
-			builtPath.add( current );
-			
-			for( Node child : tree.getChildrenOf( current ) ) {
-				buildPaths( child, builtPath  );
+			buildHeads();
+			for (int i = 0; i < heads.size(); i++) {
+				
+				buildPathsAlg(heads.get(i));
 			}
-			
-			builtPath.remove( current );
-			
+		}
+	}
+	
+	
+	public void buildPathsAlg(Node head) {
+		Path p = new Path();
+		p.add(head);
+		if (head.hasChildren()) {
+			for(int i = 0; i < head.children.size(); i++) {
+				buildPathsAlgHelper(head.children.get(i), p);
+			}
+		}
+		else {
+			paths.add(p);
 		}
 		
 	}
+	
+	public void buildPathsAlgHelper(Node child, Path p) {
+		Path pa = new Path();
+		pa.copyFrom(p);
+		pa.add(child);
+		if (!pa.loopCheck()) {
+			JOptionPane.showMessageDialog(null, "There is a loop.");
+			Panel.restart();
+			return;
+		}
+			
+		if (child.isTail())
+			paths.add(pa);
+		else {
+			for (int i = 0; i < child.children.size(); i++) {
+				buildPathsAlgHelper(child.children.get(i), pa);
+			}
+		}
+		pathsSort();
+		
+	}
+	
+	public void pathsSort() {
+		Path key = new Path();
+		for (int i = 0; i < (paths.size()-1);i++) {
+			int max = i;
+			for (int j = i; j < paths.size();j++) {
+				if (paths.get(j).getDuration()>paths.get(max).getDuration())
+					max = j; 
+			}
+			key.swapPath(paths.get(max));
+			paths.get(max).swapPath(paths.get(i));
+			paths.get(i).swapPath(key);
+		}
+	}
+	
 	
 }
