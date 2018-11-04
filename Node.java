@@ -10,13 +10,10 @@ public class Node {
     private String activityName; // name of the activity
     private Point point; // location of the node 
      
-    public int predecessors;
+    public int predecessors = 0;
     public List <Node> children = new ArrayList<>();
     private boolean isHead = false;
     private short processed = 0;
-    private boolean hasPredecessor = false;
-    
-    
     
     //getters setters
     public void setActivityName(String activityName) {
@@ -68,13 +65,9 @@ public class Node {
     public int getProcessed() {
     	return processed;
     }
-    
-    public void doesHasPredecessor() {
-    	hasPredecessor = true;
-    }
-    
+
     public boolean hasPredecessor() {
-    	return hasPredecessor;
+    	return predecessors != 0;
     }
     
     public int getPredecessors() {
@@ -92,5 +85,4 @@ public class Node {
     public boolean hasChildren() {
     	return (!children.isEmpty());
     }
-    
 }

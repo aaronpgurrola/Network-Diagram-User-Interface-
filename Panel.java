@@ -13,6 +13,10 @@ import javax.swing.JOptionPane;
 
 public class Panel extends javax.swing.JPanel {
     
+    static public abstract class NodeCreator {
+        public abstract Node createNode( Point point );
+    }
+
     boolean flag = false;
     Node predecessor;
     Node destination;
@@ -24,7 +28,7 @@ public class Panel extends javax.swing.JPanel {
     Font nodeFont;
     
     /**PANEL**/
-    public Panel( List<Node> nodes, List<Add> connects ) {
+    public Panel( List<Node> nodes, List<Add> connects, NodeCreator creator ) {
         super();
 
         // nodeFont is reusable once instantiated since it is an object.
@@ -37,106 +41,46 @@ public class Panel extends javax.swing.JPanel {
         this.connect = connects;
         
         addMouseListener(new MouseAdapter()
-        { 
+        {
             public void mousePressed(MouseEvent e)
             { 
-                if (e.getButton() == MouseEvent.BUTTON1)
-                {
-                    Node n = new Node();
-                    
-                    try {
-                    	
-                        String activityName = JOptionPane.showInputDialog("Enter the name of the activity: ");
-                        
-                        if (!activityName.equals(null) && !activityName.replace(" ", "").equals("")) {
+                if ( e.getButton() != MouseEvent.BUTTON1 ) return;
+                // We don't really want to be creating a node over another . . . 
+                if( getNodeXY( e.getPoint() ) == null ){
+                    Node n = creator.createNode( e.getPoint() );
+                    // we don't care to repaint if nothing was added
+                    if( n != null ){ repaint(); }
+                }
+            } 
 
-                            n.setActivityName(activityName);
-                        }
-                    } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(null, "Write a valid activity name.");
-                    }
-                    
-                    try{
-                		String activityDuration = JOptionPane.showInputDialog("Enter the duration of the activity:");
-                		int aDuration = Integer.parseInt(activityDuration);
-                		n.setActivityDuration(aDuration);
-                		n.setPoint(e.getPoint());
-                		/*if (nodes.isEmpty())
-                			n.setHead(true);*/
-                        nodes.add(n); // add new node to the list
-                        System.out.println("Size of nodes: " + nodes.size());
-                	}catch(Exception ex){
-                        JOptionPane.showMessageDialog(null, "Enter an integer for the duration.");
-                        
-                    }
-                }
-                repaint(); 
-        } 
-            
-          public void mouseClicked(MouseEvent e) { 
+            public void mouseClicked(MouseEvent e) { 
+                if (e.getButton() != MouseEvent.BUTTON3) return;
 
-            if (e.getButton() == MouseEvent.BUTTON3) {
-            	
-                // Create an arrow connection
-                // Shows destination and duration
-            	
-                try {
-                    if (!flag) {
-                        try {
-                        	predecessor = getNodeXY(e.getX(), e.getY());
-                        } catch (Exception ex) {
-                            JOptionPane.showMessageDialog(null, "Select a correct Activity.");
-                        }
+                if( !flag ){
+                    predecessor = getNodeXY( e.getPoint() );
+                    flag = ( predecessor != null );
+                    repaint();
+                } else {
+                    destination = getNodeXY( e.getPoint() );
+                    if (destination != null && destination != predecessor ){
                         
-                        if (predecessor != null) {
-                        flag = true;
-                        JOptionPane.showMessageDialog(null, "Right click the destination.");
-                        }
-                    }
-                    else if (flag) {
-                        try {
-                            destination = getNodeXY(e.getX(), e.getY());
-                        } catch (Exception ex) {
-                            JOptionPane.showMessageDialog(null, "Select a correct Activity.");
-                        }
+                        Add a = new Add();
+                        a.setPredecessor( predecessor );
+                        a.setDestination( destination );
                         
-                        if (destination != null) {
-                        	
-                            Add a = new Add();
-                            a.setPredecessor(predecessor);
-                            a.setDestination(destination);
-                            
-                            predecessor.add(destination);
-                            destination.incPredecessors();
-                            destination.doesHasPredecessor();
-                            
-                            flag = false;
-                            String duration = "";
-                            int d = -1;
-                            /**while (d == -1) {                                
-                                try {
-                                     duration = JOptionPane.showInputDialog("Enter the duration to get to next activity, if there is no duration enter 0.");
-                                     d = Integer.parseInt(duration);
-                                     
-                                } catch (Exception ex) {
-                                	JOptionPane.showMessageDialog(null, "Enter an integer for the duration.");
-                                }
-                               }**/
-                            a.setDuration(d);
-                            connect.add(a);
-                            //predecessor.add(destination);
-                            predecessor = null;
-                            destination = null;
-                        }
+                        // Sets up some data for the processor.
+                        predecessor.add( destination ); // add child
+                        destination.incPredecessors();      
+
+                        connect.add(a);
+                        repaint();
                     }
-                    
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Error.");
+
+                    flag = false;
+                    predecessor = null;
+                    destination = null;
                 }
-                //test
-                repaint(); 
-                }
-          } 
+            } 
 
         }); 
     }
@@ -147,15 +91,23 @@ public class Panel extends javax.swing.JPanel {
         // Drawing Nodes
         g.setFont( nodeFont ); // only need to set the graphics font once, it's cached
         for (Node node : nodes ) {
-            drawNode( node, g );
+            drawNode( g, node );
+        }
+        
+        // lets just redraw the selected node to be highlighted
+        if( flag && predecessor != null ){
+            drawNode( g, predecessor, Color.yellow );
         }
         
         // Drawing Arrows        
         for( Add adder : connect ){ 
-            drawConnection( adder, g );
+            drawConnection( g, adder );
         }
     }
    
+    public Node getNodeXY( Point point ){
+        return getNodeXY( point.x, point.y );
+    }
     public Node getNodeXY(int x, int y) {
         Point point = new Point( x, y );
         
@@ -176,25 +128,28 @@ public class Panel extends javax.swing.JPanel {
     }
 
     // Draws a node, provided a node
-    private void drawNode( Node node, Graphics g ){
+    private void drawNode( Graphics g, Node node ){
+        drawNode( g, node, Color.white );
+    }
+    private void drawNode( Graphics g, Node node, Color fill ){
         Point point = node.getPoint();
         
         // Fill
-        g.setColor(Color.WHITE);
+        g.setColor( fill );
         g.fillOval( point.x, point.y, 50, 50 );
-        g.setColor(Color.BLACK);
 
         // Inner text
+        g.setColor( Color.BLACK );
         g.drawString( node.getActivityName(), point.x + 20, point.y + 25 );
         g.drawString( String.valueOf( node.getActivityDuration() ), point.x + 20, point.y + 43 );
         
         // Outline
-        g.setColor(Color.BLUE);
+        g.setColor( Color.BLUE );
         g.drawOval( point.x, point.y, 50, 50 );
     }
 
     // Draws the arrows between connected elements
-    private void drawConnection( Add adder, Graphics g ){
+    private void drawConnection( Graphics g, Add adder  ){
         Point p1 = new Point( adder.getDestination().getPoint() );
         Point p2 = new Point( adder.getPredecessor().getPoint() );
 
