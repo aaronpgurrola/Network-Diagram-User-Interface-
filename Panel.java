@@ -22,6 +22,7 @@ public class Panel extends javax.swing.JPanel {
     
     
     Processor pro = new Processor(nodes);
+    Font nodeFont;
     
     
     public List<Node> getNodes() {
@@ -34,18 +35,13 @@ public class Panel extends javax.swing.JPanel {
 
     public void setNodes(List<Node> nodes) {
         this.nodes = nodes;
-    }
-
-    public void setAdd(List<Add> connect) {
-        this.connect = connect;
-    }
-    
-    
-    
+    }    
     
     /**PANEL**/
     public Panel() {
-    	
+        
+        // nodeFont is reusable once instantiated since it is an object.
+        nodeFont = new Font( "Verdana", Font.BOLD, 16 );
     	predecessor = null;
         destination = null;
         this.nodes = new ArrayList<>();
@@ -156,100 +152,100 @@ public class Panel extends javax.swing.JPanel {
         }); 
     }
    
-    public void paint (Graphics g)
+    public void paint( Graphics g )
     {
         super.paint(g);
 
         // Drawing Nodes
-        for (int i = 0; i < nodes.size(); i++) {
-            
-            g.setColor(Color.WHITE);
-            g.fillOval(nodes.get(i).getPoint().x, nodes.get(i).getPoint().y, 50, 50);
-            g.setColor(Color.BLACK);
-            g.setFont( new Font( "Verdana", Font.BOLD, 16 ) );
-            g.drawString(nodes.get(i).getActivityName(), nodes.get(i).getPoint().x + 20, nodes.get(i).getPoint().y + 25);
-            g.drawString("" + nodes.get(i).getActivityDuration(), nodes.get(i).getPoint().x + 20, nodes.get(i).getPoint().y + 43);
-            g.setColor(Color.BLUE);
-            g.drawOval(nodes.get(i).getPoint().x, nodes.get(i).getPoint().y, 50, 50);
-                      
+        g.setFont( nodeFont ); // only need to set the graphics font once, it's cached
+        for (Node node : nodes ) {
+            drawNode( node, g );
         }
         
-        // Drawing Arrows
-        Point p1 = new Point();
-        Point p2 = new Point();
-        
-        for (int i = 0; i < connect.size(); i++) {
-            System.out.println("" + connect.get(i).getDestination().getActivityName());
-            p1.x = connect.get(i).getDestination().getPoint().x;
-            p1.y = connect.get(i).getDestination().getPoint().y;
-            p2.x = connect.get(i).getPredecessor().getPoint().x;
-            p2.y = connect.get(i).getPredecessor().getPoint().y;
-                          
-            g.setColor(Color.DARK_GRAY);
-            //g.drawString(String.valueOf(connect.get(i).getDuration()), (p1.x+p2.x)/2,(p1.y+p2.y)/2);
-           
-            g.setColor(Color.black);
-            
-            double angle = 0.0;
-            double angleSeparation = 0.0;
-            double tx;
-            double ty;
-            int size = 0;
-            Point point1 = null;
-            Point point2 = null;
-            
-            point1 = new Point(p2.x+25,p2.y+25);
-            point2 = new Point(p1.x+15,p1.y+15);
-
-            // arrow size 
-            size = 10;
-
-            ty =-(point1.y-point2.y)*1.0;
-            tx = (point1.x-point2.x)*1.0;
-            
-            angle = Math.atan(ty/tx);
-
-            if(tx < 0)
-            { // if negative add 180 degrees
-               angle += Math.PI;
-            }
-
-            Point point = point2;
-
-            angleSeparation = 25.0;
-
-            p1.x = (int)(point.x + size*Math.cos (angle-Math.toRadians (angleSeparation)));
-            p1.y = (int)(point.y - size*Math.sin (angle-Math.toRadians (angleSeparation)));
-            p2.x = (int)(point.x + size*Math.cos (angle+Math.toRadians (angleSeparation)));
-            p2.y = (int)(point.y - size*Math.sin (angle+Math.toRadians (angleSeparation)));
-
-            Graphics2D g2D = (Graphics2D)g;
-
-            // color of arrow line
-            g.setColor (Color.RED);
-           
-            g2D.setStroke (new BasicStroke(1.2f));
-           
-            g.drawLine (point1.x, point1.y, point.x, point.y);
-            
-            g.drawLine (p1.x, p1.y, point.x, point.y);
-            g.drawLine (p2.x, p2.y, point.x, point.y);  
+        // Drawing Arrows        
+        for( Add adder : connect ){ 
+            drawConnection( adder, g );
         }
     }
    
     public Node getNodeXY(int x, int y) {
-        for (int i = 0; i < nodes.size(); i++) {
-            System.out.println(x + "x  nod"+ nodes.get(i).getPoint().x);
-           
-            System.out.println(y + "y nod" + nodes.get(i).getPoint().y);
-        if ((x >= nodes.get(i).getPoint().x  && x  <= nodes.get(i).getPoint().x + 50) && (y >= nodes.get(i).getPoint().y &&  y  <= nodes.get(i).getPoint().y + 50))
-            return nodes.get(i); 
+        Point point = new Point( x, y );
+        
+        // find node
+        for ( Node node : nodes ) {
+            if( pointInCircle( point, node.getPoint(), 50 ) ) return node;
         }
+
+        // did not find a node
         return null;
+    }
+
+    private boolean pointInCircle( Point point, Point pos, int rad ){
+        return (( point.x >= pos.x )  && 
+                ( point.x <= pos.x + rad ) && 
+                ( point.y >= pos.y ) &&  
+                ( point.y <= pos.y + rad ) );
+    }
+
+    // Draws a node, provided a node
+    private void drawNode( Node node, Graphics g ){
+        Point point = node.getPoint();
+        
+        // Fill
+        g.setColor(Color.WHITE);
+        g.fillOval( point.x, point.y, 50, 50 );
+        g.setColor(Color.BLACK);
+
+        // Inner text
+        g.drawString( node.getActivityName(), point.x + 20, point.y + 25 );
+        g.drawString( String.valueOf( node.getActivityDuration() ), point.x + 20, point.y + 43 );
+        
+        // Outline
+        g.setColor(Color.BLUE);
+        g.drawOval( point.x, point.y, 50, 50 );
+    }
+
+    // Draws the arrows between connected elements
+    private void drawConnection( Add adder, Graphics g ){
+        Point p1 = new Point( adder.getDestination().getPoint() );
+        Point p2 = new Point( adder.getPredecessor().getPoint() );
+
+        // 15 is the angle seperation, so 30 from head to head
+        double angleSeparation = Math.toRadians( 180 - 15 );
+        int size = 15;
+
+        // center of each node, will be the edges later.
+        Point point1 = new Point( p2.x + 25, p2.y + 25);
+        Point point2 = new Point( p1.x + 25, p1.y + 25);
+
+        // angle from origin to destination
+        double angle = Math.atan2( point2.y-point1.y, point2.x-point1.x );
+        
+        // shift the line to the edges of the circles
+        point1.x += Math.cos( angle ) * 27.45;
+        point1.y += Math.sin( angle ) * 27.45;
+        point2.x -= Math.cos( angle ) * 27.45;
+        point2.y -= Math.sin( angle ) * 27.45;
+    
+        // Defining the arrow tips on destination
+        p1.x = (int)(point2.x + size*Math.cos( -angle - angleSeparation ) );
+        p1.y = (int)(point2.y - size*Math.sin( -angle - angleSeparation ) );
+        p2.x = (int)(point2.x + size*Math.cos( -angle + angleSeparation ) );
+        p2.y = (int)(point2.y - size*Math.sin( -angle + angleSeparation ) );
+
+        // color of arrow line
+        g.setColor(Color.RED);
+        
+        ((Graphics2D)g).setStroke(new BasicStroke(2.5f));
+        
+        // Draw line and arrow-tip
+        g.drawLine( point1.x, point1.y, point2.x, point2.y );
+        g.drawLine( p1.x, p1.y, point2.x, point2.y );
+        g.drawLine( p2.x, p2.y, point2.x, point2.y );
     }
     
 	public static void restart() {
-	connect.clear(); 
-    	nodes.clear();
+        connect.clear(); 
+        nodes.clear();
 	}
 }
