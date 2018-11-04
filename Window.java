@@ -16,8 +16,8 @@ public class Window extends javax.swing.JFrame {
     
     private javax.swing.JPanel  jPanel1;
     
-    public List <Node> nodes;
-    public List <Add> connect;
+    public List<Node> nodes;
+    public List<Add> connect;
     
     private int APPLET_WIDTH = 800, APPLET_HEIGHT = 600;
     
@@ -27,9 +27,12 @@ public class Window extends javax.swing.JFrame {
     }
 
     private void initComponents() {
-    	
-    	//jPanel Creation
-        jPanel1 = new Panel();
+        // Node and connection data
+        this.nodes = new ArrayList<>();
+        this.connect = new ArrayList<>();
+        
+        //jPanel Creation
+        jPanel1 = new Panel( this.nodes, this.connect );
         
         //jButton Creation
         jButtonAdd = new javax.swing.JButton();
@@ -39,10 +42,6 @@ public class Window extends javax.swing.JFrame {
         jButtonHelp = new javax.swing.JButton();
         jButtonAbout = new javax.swing.JButton();
         jButtonProcess = new javax.swing.JButton();
-        
-        //Arraylist creation
-        this.nodes = new ArrayList<>();
-        this.connect = new ArrayList<>();
         
         //EXIT ON CLOSE as Default
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -200,47 +199,52 @@ public class Window extends javax.swing.JFrame {
     /**ACTIONS**/
     private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {
        
-       JOptionPane.showMessageDialog(null, "Click where you want the activity located.");
+       JOptionPane.showMessageDialog( this, "Click where you want the activity located.");
     }
 
     private void jButtonConnectActionPerformed(java.awt.event.ActionEvent evt) {
 
-        JOptionPane.showMessageDialog(null, "Right click the predecessor activity to link the activities.");
+        JOptionPane.showMessageDialog( this, "Right click the predecessor activity to link the activities.");
     }
     
     private void jButtonRestartActionPerformed(java.awt.event.ActionEvent evt) {
 
-        JOptionPane.showMessageDialog(null, "Network Diagram Cleared."); 
-        Panel.restart(); 
+        JOptionPane.showMessageDialog( this, "Network Diagram Cleared."); 
+        
+        // We clear our data here.
+        connect.clear(); 
+        nodes.clear();
+
         repaint();
     }
     
     private void jButtonEndActionPerformed(java.awt.event.ActionEvent evt) {
 
-        JOptionPane.showMessageDialog(null, "Application will close.");
+        JOptionPane.showMessageDialog( this, "Application will close.");
         System.exit(0);
     }
     
     private void jButtonAboutActionPerformed(java.awt.event.ActionEvent evt) {
 
-        JOptionPane.showMessageDialog(null, "Created by\n"
+        JOptionPane.showMessageDialog( this, "Created by\n"
         		+ "Raquel Fierros    Andrew Resto    Aaron Gurrola\n"
         		+"\nThe program is designed to process activity diagrams from user inputs.");
     }
     
     private void jButtonHelpActionPerformed(java.awt.event.ActionEvent evt) {
 
-        JOptionPane.showMessageDialog(null, "Start by creating an activity node."
+        JOptionPane.showMessageDialog( this, "Start by creating an activity node."
         		+"\nThe first node created is the head.\n"
         		+ "Pressing any button, and it will create a dialogue box with information on the button.\n"
         		+"To exit the program, press the End Application button.");
     }
     
     private void jButtonProcessActionPerformed(java.awt.event.ActionEvent evt) {
-    	Processor p = new Processor(Panel.nodes);
-    	p.buildPaths();
-        JOptionPane.showMessageDialog(null, p.outputString());
         
+        Processor p = new Processor( this.nodes );
+        p.buildPaths();
+        JOptionPane.showMessageDialog( this, p.outputString());
+
     }
     
     /**END ACTIONS**/

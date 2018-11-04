@@ -5,31 +5,31 @@ import javax.swing.JOptionPane;
 import java.util.ArrayList;
 
 public class Processor {
-	public List <Node> nodes;
-	public List <Path> paths;
-	public List <Node> heads;
+	public List<Node> nodes;
+	public List<Path> paths;
+	public List<Node> heads;
 	
-	Processor(List <Node> nodes){
+	Processor( List<Node> nodes ){
 		this.nodes = nodes;
 		paths = new ArrayList<>();
 		heads = new ArrayList<>();
 	}
 	
 	private void buildHeads() {
-		System.out.println("size of nodes = "+Panel.nodes.size());
-		for (int i = 0; i < Panel.nodes.size(); i++) {
-			//System.out.println((!Panel.nodes.get(i).hasPredecessor())+" + "+i+"Activity name: "+Panel.nodes.get(i).getActivityName());
-			if(!Panel.nodes.get(i).hasPredecessor()) {
+		System.out.println("size of nodes = "+nodes.size());
+		for (int i = 0; i < nodes.size(); i++) {
+			//System.out.println((!nodes.get(i).hasPredecessor())+" + "+i+"Activity name: "+nodes.get(i).getActivityName());
+			if(!nodes.get(i).hasPredecessor()) {
 				System.out.println(i);
-				heads.add((Panel.nodes.get(i)));
+				heads.add((nodes.get(i)));
 			}
 		}
 	}
 	
 	public boolean isConnected() {
-		for (int i = 0; i < Panel.nodes.size();i++) {
-			if (!Panel.nodes.get(i).hasPredecessor()) {
-				if (Panel.nodes.get(i).isTail())
+		for (int i = 0; i < nodes.size();i++) {
+			if (!nodes.get(i).hasPredecessor()) {
+				if (nodes.get(i).isTail())
 					return false;
 			} 
 		}
@@ -37,7 +37,8 @@ public class Processor {
 	}
 	
 	public boolean validHead() {
-		return (!Panel.nodes.get(0).hasPredecessor());
+		return !heads.isEmpty();
+		// return (!nodes.get(0).hasPredecessor());
 	}
 	
 	public String outputString() {
@@ -57,19 +58,19 @@ public class Processor {
 		if(!isConnected()) {
 			JOptionPane.showMessageDialog(null, "Not connected.");
 		}
-		else if (!validHead()) {
-			JOptionPane.showMessageDialog(null, "Invalid head.");
-			return;
-		}
-		else if (!Panel.nodes.get(0).hasChildren()) {
+		else if (!nodes.get(0).hasChildren()) {
 			Path p = new Path();
-			p.add(Panel.nodes.get(0));
+			p.add(nodes.get(0));
 			return;
 		} else {
 			buildHeads();
-			for (int i = 0; i < heads.size(); i++) {
-				
-				buildPathsAlg(heads.get(i));
+			if( !validHead() ){
+				JOptionPane.showMessageDialog(null, "Invalid head.");
+				return;
+			} else {
+				for (int i = 0; i < heads.size(); i++){ 
+					buildPathsAlg(heads.get(i));
+				}
 			}
 		}
 	}
@@ -93,9 +94,11 @@ public class Processor {
 		Path pa = new Path();
 		pa.copyFrom(p);
 		pa.add(child);
+
 		if (!pa.loopCheck()) {
 			JOptionPane.showMessageDialog(null, "There is a loop.");
-			Panel.restart();
+			// I don't believe this is a requirement.
+			// Panel.restart();
 			return;
 		}
 			
@@ -112,7 +115,7 @@ public class Processor {
 	
 	public void pathsSort() {
 		Path key = new Path();
-		for (int i = 0; i < (paths.size()-1);i++) {
+		for (int i = 0; i < (paths.size()-1); i++) {
 			int max = i;
 			for (int j = i; j < paths.size();j++) {
 				if (paths.get(j).getDuration()>paths.get(max).getDuration())
