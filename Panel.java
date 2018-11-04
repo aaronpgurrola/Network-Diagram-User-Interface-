@@ -17,35 +17,24 @@ public class Panel extends javax.swing.JPanel {
     Node predecessor;
     Node destination;
     
-    public static List <Node> nodes;
-    public static List <Add> connect;
-    
+    private List<Node> nodes;
+    private List<Add> connect;
     
     Processor pro = new Processor(nodes);
     Font nodeFont;
     
-    
-    public List<Node> getNodes() {
-        return nodes;
-    }
-
-    public List<Add> getAdd() {
-        return connect;
-    }
-
-    public void setNodes(List<Node> nodes) {
-        this.nodes = nodes;
-    }    
-    
     /**PANEL**/
-    public Panel() {
-        
+    public Panel( List<Node> nodes, List<Add> connects ) {
+        super();
+
         // nodeFont is reusable once instantiated since it is an object.
         nodeFont = new Font( "Verdana", Font.BOLD, 16 );
-    	predecessor = null;
+        
+        predecessor = null;
         destination = null;
-        this.nodes = new ArrayList<>();
-        this.connect = new ArrayList<>();
+
+        this.nodes = nodes;
+        this.connect = connects;
         
         addMouseListener(new MouseAdapter()
         { 
@@ -152,8 +141,7 @@ public class Panel extends javax.swing.JPanel {
         }); 
     }
    
-    public void paint( Graphics g )
-    {
+    public void paint( Graphics g ){
         super.paint(g);
 
         // Drawing Nodes
@@ -243,9 +231,4 @@ public class Panel extends javax.swing.JPanel {
         g.drawLine( p1.x, p1.y, point2.x, point2.y );
         g.drawLine( p2.x, p2.y, point2.x, point2.y );
     }
-    
-	public static void restart() {
-        connect.clear(); 
-        nodes.clear();
-	}
 }
