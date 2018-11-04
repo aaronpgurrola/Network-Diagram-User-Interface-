@@ -214,6 +214,7 @@ public class Panel extends javax.swing.JPanel {
         double angleSeparation = Math.toRadians( 180 - 15 );
         int size = 15;
 
+        // center of each node, will be the edges later.
         Point point1 = new Point( p2.x + 25, p2.y + 25);
         Point point2 = new Point( p1.x + 25, p1.y + 25);
 
@@ -244,7 +245,7 @@ public class Panel extends javax.swing.JPanel {
     }
     
 	public static void restart() {
-	    connect.clear(); 
-    	nodes.clear();
+        connect.clear(); 
+        nodes.clear();
 	}
 }
