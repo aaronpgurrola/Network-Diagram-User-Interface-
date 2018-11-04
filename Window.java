@@ -16,8 +16,8 @@ public class Window extends javax.swing.JFrame {
     
     private javax.swing.JPanel  jPanel1;
     
-    public List <Node> nodes;
-    public List <Add> connect;
+    public List<Node> nodes;
+    public List<Add> connect;
     
     private int APPLET_WIDTH = 800, APPLET_HEIGHT = 600;
     
@@ -27,9 +27,12 @@ public class Window extends javax.swing.JFrame {
     }
 
     private void initComponents() {
-    	
-    	//jPanel Creation
-        jPanel1 = new Panel();
+        // Node and connection data
+        this.nodes = new ArrayList<>();
+        this.connect = new ArrayList<>();
+        
+        //jPanel Creation
+        jPanel1 = new Panel( this.nodes, this.connect );
         
         //jButton Creation
         jButtonAdd = new javax.swing.JButton();
@@ -39,10 +42,6 @@ public class Window extends javax.swing.JFrame {
         jButtonHelp = new javax.swing.JButton();
         jButtonAbout = new javax.swing.JButton();
         jButtonProcess = new javax.swing.JButton();
-        
-        //Arraylist creation
-        this.nodes = new ArrayList<>();
-        this.connect = new ArrayList<>();
         
         //EXIT ON CLOSE as Default
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -212,7 +211,9 @@ public class Window extends javax.swing.JFrame {
 
         JOptionPane.showMessageDialog( this, "Network Diagram Cleared."); 
         
-        Panel.restart(); 
+        // We clear our data here.
+        connect.clear(); 
+        nodes.clear();
 
         repaint();
     }
@@ -239,10 +240,11 @@ public class Window extends javax.swing.JFrame {
     }
     
     private void jButtonProcessActionPerformed(java.awt.event.ActionEvent evt) {
-    	Processor p = new Processor(Panel.nodes);
-    	p.buildPaths();
-        JOptionPane.showMessageDialog( this, p.outputString());
         
+        Processor p = new Processor( this.nodes );
+        p.buildPaths();
+        JOptionPane.showMessageDialog( this, p.outputString());
+
     }
     
     /**END ACTIONS**/
