@@ -2,9 +2,9 @@
 
 public class Add {
     
-    public Add() {
+    // public Add() {
         
-    }  
+    // }  
     private Node predecessor; // Node predecessor
     private Node destination;// Node destination
     private int duration;// Node duration
