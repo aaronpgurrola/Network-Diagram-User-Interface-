@@ -200,37 +200,39 @@ public class Window extends javax.swing.JFrame {
     /**ACTIONS**/
     private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {
        
-       JOptionPane.showMessageDialog(null, "Click where you want the activity located.");
+       JOptionPane.showMessageDialog( this, "Click where you want the activity located.");
     }
 
     private void jButtonConnectActionPerformed(java.awt.event.ActionEvent evt) {
 
-        JOptionPane.showMessageDialog(null, "Right click the predecessor activity to link the activities.");
+        JOptionPane.showMessageDialog( this, "Right click the predecessor activity to link the activities.");
     }
     
     private void jButtonRestartActionPerformed(java.awt.event.ActionEvent evt) {
 
-        JOptionPane.showMessageDialog(null, "Network Diagram Cleared."); 
+        JOptionPane.showMessageDialog( this, "Network Diagram Cleared."); 
+        
         Panel.restart(); 
+
         repaint();
     }
     
     private void jButtonEndActionPerformed(java.awt.event.ActionEvent evt) {
 
-        JOptionPane.showMessageDialog(null, "Application will close.");
+        JOptionPane.showMessageDialog( this, "Application will close.");
         System.exit(0);
     }
     
     private void jButtonAboutActionPerformed(java.awt.event.ActionEvent evt) {
 
-        JOptionPane.showMessageDialog(null, "Created by\n"
+        JOptionPane.showMessageDialog( this, "Created by\n"
         		+ "Raquel Fierros    Andrew Resto    Aaron Gurrola\n"
         		+"\nThe program is designed to process activity diagrams from user inputs.");
     }
     
     private void jButtonHelpActionPerformed(java.awt.event.ActionEvent evt) {
 
-        JOptionPane.showMessageDialog(null, "Start by creating an activity node."
+        JOptionPane.showMessageDialog( this, "Start by creating an activity node."
         		+"\nThe first node created is the head.\n"
         		+ "Pressing any button, and it will create a dialogue box with information on the button.\n"
         		+"To exit the program, press the End Application button.");
@@ -239,7 +241,7 @@ public class Window extends javax.swing.JFrame {
     private void jButtonProcessActionPerformed(java.awt.event.ActionEvent evt) {
     	Processor p = new Processor(Panel.nodes);
     	p.buildPaths();
-        JOptionPane.showMessageDialog(null, p.outputString());
+        JOptionPane.showMessageDialog( this, p.outputString());
         
     }
     
