@@ -73,12 +73,12 @@ public class Panel extends javax.swing.JPanel {
                         destination.incPredecessors();      
 
                         connect.add(a);
-                        repaint();
                     }
 
                     flag = false;
                     predecessor = null;
                     destination = null;
+                    repaint();
                 }
             } 
 
@@ -105,19 +105,17 @@ public class Panel extends javax.swing.JPanel {
         }
     }
    
-    public Node getNodeXY( Point point ){
-        return getNodeXY( point.x, point.y );
-    }
-    public Node getNodeXY(int x, int y) {
-        Point point = new Point( x, y );
-        
+    public Node getNodeXY( Point point ){        
         // find node
         for ( Node node : nodes ) {
             if( pointInCircle( point, node.getPoint(), 50 ) ) return node;
         }
-
         // did not find a node
         return null;
+    }
+
+    public Node getNodeXY(int x, int y) {
+        return getNodeXY( new Point( x, y ) );
     }
 
     private boolean pointInCircle( Point point, Point pos, int rad ){
