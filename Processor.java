@@ -8,6 +8,9 @@ public class Processor {
 	public List<Node> nodes;
 	public List<Path> paths;
 	public List<Node> heads;
+
+	private boolean didFail = false;
+	private String failureString = "";
 	
 	Processor( List<Node> nodes ){
 		this.nodes = nodes;
@@ -16,9 +19,9 @@ public class Processor {
 	}
 	
 	private void buildHeads() {
-		System.out.println("size of nodes = "+nodes.size());
+		// System.out.println("size of nodes = "+nodes.size());
 		for (int i = 0; i < nodes.size(); i++) {
-			//System.out.println((!nodes.get(i).hasPredecessor())+" + "+i+"Activity name: "+nodes.get(i).getActivityName());
+			// System.out.println((!nodes.get(i).hasPredecessor())+" + "+i+"Activity name: "+nodes.get(i).getActivityName());
 			if(!nodes.get(i).hasPredecessor()) {
 				System.out.println(i);
 				heads.add((nodes.get(i)));
@@ -49,32 +52,44 @@ public class Processor {
 		return outputString;
 	}
 	
-	
-	
-	
-	
-	
 	public void buildPaths() {
 		if(!isConnected()) {
-			JOptionPane.showMessageDialog(null, "Not connected.");
-		}
-		else if (!nodes.get(0).hasChildren()) {
-			Path p = new Path();
-			p.add(nodes.get(0));
+			
+			System.out.println("not connected");
+			didFail = true;
+			failureString = "Not connected.";
 			return;
+			// JOptionPane.showMessageDialog(null, "Not connected.");
+		
 		} else {
 			buildHeads();
 			if( !validHead() ){
-				JOptionPane.showMessageDialog(null, "Invalid head.");
+				
+				// JOptionPane.showMessageDialog(null, "Invalid head.");
+				System.out.println("no heads.");
+				didFail = true;
+				failureString = "Invalid head.";
+
 				return;
+
 			} else {
-				for (int i = 0; i < heads.size(); i++){ 
-					buildPathsAlg(heads.get(i));
-				}
+
+				didFail = false;
+				failureString = "";
+				paths.clear();
+				
+				for ( Node head : heads ) buildPathsAlg( head );
 			}
 		}
 	}
 	
+	public boolean failed(){
+		return didFail;
+	}
+
+	public String failureMessage(){
+		return failureString;
+	}
 	
 	public void buildPathsAlg(Node head) {
 		Path p = new Path();
@@ -91,14 +106,15 @@ public class Processor {
 	}
 	
 	public void buildPathsAlgHelper(Node child, Path p) {
+		// Branched path, copy to reference this uniquely
 		Path pa = new Path();
 		pa.copyFrom(p);
 		pa.add(child);
 
 		if (!pa.loopCheck()) {
-			JOptionPane.showMessageDialog(null, "There is a loop.");
-			// I don't believe this is a requirement.
-			// Panel.restart();
+			// JOptionPane.showMessageDialog(null, "There is a loop.");
+			didFail = true;
+			failureString = "There is a loop.";
 			return;
 		}
 			

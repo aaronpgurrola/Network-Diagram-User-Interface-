@@ -249,8 +249,12 @@ public class Window extends javax.swing.JFrame {
         
         Processor p = new Processor( this.nodes );
         p.buildPaths();
-        JOptionPane.showMessageDialog( this, p.outputString());
 
+        if( p.failed() ){
+            JOptionPane.showMessageDialog( this, p.failureMessage(), "HEY!! We got a PROBLEM.", JOptionPane.ERROR_MESSAGE );
+        } else {
+            JOptionPane.showMessageDialog( this, p.outputString());
+        }
     }
 
     private Node actionCreateNode( Point point ){
