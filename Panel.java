@@ -42,9 +42,9 @@ public class Panel extends javax.swing.JPanel {
         
         addMouseListener(new MouseAdapter()
         {
-            public void mousePressed(MouseEvent e)
-            { 
+            public void mousePressed(MouseEvent e){ 
                 if ( e.getButton() != MouseEvent.BUTTON1 ) return;
+
                 // We don't really want to be creating a node over another . . . 
                 if( getNodeXY( e.getPoint() ) == null ){
                     Node n = creator.createNode( e.getPoint() );
@@ -57,9 +57,10 @@ public class Panel extends javax.swing.JPanel {
                 if (e.getButton() != MouseEvent.BUTTON3) return;
 
                 if( !flag ){
+                    
                     predecessor = getNodeXY( e.getPoint() );
                     flag = ( predecessor != null );
-                    repaint();
+                    if( flag ) repaint(); // only repaint if updated.
                 } else {
                     destination = getNodeXY( e.getPoint() );
                     if (destination != null && destination != predecessor ){
