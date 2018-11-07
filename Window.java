@@ -4,17 +4,19 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import java.awt.Point;
 import java.util.Scanner;
+import javax.swing.JButton;
 
 
 public class Window extends javax.swing.JFrame {
 	
-    private javax.swing.JButton jButtonAdd;
-    private javax.swing.JButton jButtonConnect;
-    private javax.swing.JButton jButtonRestart;
-    private javax.swing.JButton jButtonEnd;
-    private javax.swing.JButton jButtonHelp;
-    private javax.swing.JButton jButtonAbout;
-    private javax.swing.JButton jButtonProcess;
+    private JButton jButtonAdd;
+    private JButton jButtonConnect;
+    private JButton jButtonRestart;
+    private JButton jButtonEnd;
+    private JButton jButtonHelp;
+    private JButton jButtonAbout;
+    private JButton jButtonProcess;
+    private JButton jButtonFileReport;
     
     private javax.swing.JPanel  jPanel1;
     
@@ -41,13 +43,13 @@ public class Window extends javax.swing.JFrame {
         } );
         
         //jButton Creation
-        jButtonAdd = new javax.swing.JButton();
-        jButtonConnect = new javax.swing.JButton();
-        jButtonRestart = new javax.swing.JButton();
-        jButtonEnd = new javax.swing.JButton();
-        jButtonHelp = new javax.swing.JButton();
-        jButtonAbout = new javax.swing.JButton();
-        jButtonProcess = new javax.swing.JButton();
+        jButtonAdd = new JButton();
+        jButtonConnect = new JButton();
+        jButtonRestart = new JButton();
+        jButtonEnd = new JButton();
+        jButtonHelp = new JButton();
+        jButtonAbout = new JButton();
+        jButtonProcess = new JButton();
         
         //EXIT ON CLOSE as Default
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
