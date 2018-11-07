@@ -30,18 +30,19 @@ public class Report{
 
     // Writes a report file.
     // 
-    // Given a location & title to write a file, this function will write the content file.
+    // Given a file, this function will write the content file.
     // This object must have been provided current data to write out accurate results.
     //
     // returns successful write true/false
-    public boolean writeReport( String filePath, String title ){
-        File file = new File( filePath + "/" + title );
+    public boolean write( File file ){
         try( BufferedWriter writer = new BufferedWriter( new FileWriter(file) ) ){
             
             StringBuilder sb = new StringBuilder();
             
+            // Get title of file
+
             // Header 
-            sb.append( title )
+            sb.append( file.getName().replace(".netr", "") )
                 .append( SEP )
                 .append( LocalDateTime.now() )
                 .append( SEP ).append( SEP );

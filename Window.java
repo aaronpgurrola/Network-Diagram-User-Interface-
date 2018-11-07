@@ -11,6 +11,9 @@ import javax.swing.GroupLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 
 public class Window extends javax.swing.JFrame {
 	
@@ -25,8 +28,10 @@ public class Window extends javax.swing.JFrame {
     
     private javax.swing.JPanel  jPanel1;
     
-    public List<Node> nodes;
-    public List<Add> connect;
+    private List<Node> nodes;
+    private List<Add> connect;
+    Processor processor;
+
     
     private int APPLET_WIDTH = 800, APPLET_HEIGHT = 600;
     
@@ -158,6 +163,16 @@ public class Window extends javax.swing.JFrame {
                 jButtonProcessActionPerformed(evt);
             }
         });
+
+        //FileReport Button
+        jButtonFileReport.setBackground(new java.awt.Color(51, 204, 255));
+        jButtonFileReport.setText("Report");
+
+        jButtonFileReport.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                jButtonProcessFileReportPerformed(evt);
+            }
+        });
         
         
         /**END BUTTON SETUP**/
@@ -174,6 +189,7 @@ public class Window extends javax.swing.JFrame {
                     .addComponent(jButtonRestart, GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
                     .addComponent(jButtonAbout, GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
                     .addComponent(jButtonHelp, GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                    .addComponent(jButtonFileReport, GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
                     .addComponent(jButtonEnd, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 
@@ -188,18 +204,20 @@ public class Window extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(141, 141, 141)
                                 .addComponent(jButtonAdd, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jButtonConnect, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jButtonProcess, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jButtonRestart, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jButtonAbout, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jButtonHelp, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButtonEnd, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButtonFileReport, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButtonEnd, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()))))));
         //PACK
         pack();
@@ -254,8 +272,11 @@ public class Window extends javax.swing.JFrame {
     }
     
     private void jButtonProcessActionPerformed(ActionEvent evt) {
+                
+        processor = new Processor( this.nodes );
         
-        Processor p = new Processor( this.nodes );
+        Processor p = processor; 
+
         p.buildPaths();
 
         if( p.failed() ){
@@ -263,6 +284,42 @@ public class Window extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog( this, p.outputString());
         }
+    }
+
+    private void jButtonProcessFileReportPerformed( ActionEvent evt ){
+        // Open some stuff
+        JFileChooser chooser = new JFileChooser(".");
+        chooser.setFileFilter( new FileNameExtensionFilter("Network Reports", "netr") );
+        int choice = chooser.showOpenDialog( this );
+
+        if ( choice != JFileChooser.APPROVE_OPTION ){ return; }
+
+        java.io.File file = chooser.getSelectedFile();
+
+        if( !file.exists() ){
+            JOptionPane.showMessageDialog( this, "A new file will be created." );
+
+            if( !file.getName().endsWith(".netr") ){
+                file = new java.io.File( file.getAbsolutePath() + ".netr" );
+            }
+
+        } else {
+
+            // really naive MIME check
+            if( !file.getName().endsWith(".netr") ){
+                JOptionPane.showMessageDialog( this, "Incorrect file type.", 
+                    "HEY!! We got a PROBLEM.", JOptionPane.ERROR_MESSAGE );
+                return;
+            }
+
+            String question = "Are you sure you would like to overwrite this file?";
+            int response = JOptionPane.showConfirmDialog( this, question, "Confirm", 
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if( response != JOptionPane.YES_OPTION ){ return; } 
+        }
+
+        Report report = new Report( this.nodes, this.processor );
+        report.write( file );
     }
 
     private Node actionCreateNode( Point point ){
