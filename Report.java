@@ -1,12 +1,17 @@
 
 import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.File;
+import java.io.IOException;
 
 import java.lang.StringBuilder;
 import java.time.LocalDateTime;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
+import java.util.ArrayList;
+
 
 
 
@@ -27,7 +32,9 @@ public class Report{
     // 
     // Given a location & title to write a file, this function will write the content file.
     // This object must have been provided current data to write out accurate results.
-    public void writeReport( String filePath, String title ){
+    //
+    // returns successful write true/false
+    public boolean writeReport( String filePath, String title ){
         File file = new File( filePath + "/" + title );
         try( BufferedWriter writer = new BufferedWriter( new FileWriter(file) ) ){
             
@@ -43,7 +50,7 @@ public class Report{
             sb.append( "Activitys:" )
                 .append( SEP );
 
-            sortNodes();
+            Collections.sort( nodes, sorter );
             
             for( Node node : nodes ){
                 sb.append( node.getActivityName() )
@@ -61,20 +68,19 @@ public class Report{
 
             return true;
         } 
-        return false;
-    }
-
-    // sortNodes internall sorts our node list lexicographically
-    private void sortNodes(){
-        final private Comparator sorter = new Comparator<Node>() {
-            public int compare( Node L, Node R ) {
-                return L.getActivityName().compareTo( R.getActivityName() );
-            }
+        catch( IOException _E ) {
+            return false;
         }
-        Collections.sort( nodes, sorter );
+
     }
 
     private List<Node> nodes;
     private Processor processor;
     final static private String SEP = System.getProperty( "line.separator" ); 
+
+    static final private Comparator sorter = new Comparator<Node>() {
+        public int compare( Node L, Node R ) {
+            return L.getActivityName().compareTo( R.getActivityName() );
+        }
+    };
 }
