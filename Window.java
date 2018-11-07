@@ -129,7 +129,7 @@ public class Window extends javax.swing.JFrame {
             }
         });
         
-      //About Button
+        //About Button
         jButtonAbout.setBackground(new java.awt.Color(51, 204, 255));
         jButtonAbout.setText("About");
         
@@ -139,7 +139,7 @@ public class Window extends javax.swing.JFrame {
             }
         });
         
-        //About Button
+        //Help Button
         jButtonHelp.setBackground(new java.awt.Color(51, 204, 255));
         jButtonHelp.setText("Help");
         
@@ -149,10 +149,10 @@ public class Window extends javax.swing.JFrame {
             }
         });
         
-      //About Button
+        //Process Button
         jButtonProcess.setBackground(new java.awt.Color(51, 204, 255));
         jButtonProcess.setText("Process");
-        
+
         jButtonProcess.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 jButtonProcessActionPerformed(evt);
