@@ -272,12 +272,14 @@ public class Window extends javax.swing.JFrame {
     }
     
     private void jButtonProcessActionPerformed(ActionEvent evt) {
-                
-        processor = new Processor( this.nodes );
-        
         Processor p = processor; 
-
-        p.buildPaths();
+        if( processor == null ){
+            // We only need to run through this once if we're 
+            // nulling out the processor (processor=null;) when a change has happened in the 
+            // network.
+            p = processor = new Processor( this.nodes );
+            p.buildPaths();
+        }
 
         if( p.failed() ){
             JOptionPane.showMessageDialog( this, p.failureMessage(), "HEY!! We got a PROBLEM.", JOptionPane.ERROR_MESSAGE );
@@ -365,12 +367,14 @@ public class Window extends javax.swing.JFrame {
                 err = "Please enter an integer value.";
             } else {
                 
+                // : ACTION SUCCESFULLY CREATED HERE :
                 Node n = new Node();
                 n.setActivityName( nameS );
                 n.setActivityDuration( foundDuration );
                 n.setPoint( point );
 
                 this.nodes.add( n );
+                processor = null; // every time our network changes, it has not been processed.
                 return n;
             }
 

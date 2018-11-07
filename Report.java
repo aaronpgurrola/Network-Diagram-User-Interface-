@@ -42,8 +42,10 @@ public class Report{
             // Get title of file
 
             // Header 
-            sb.append( file.getName().replace(".netr", "") )
+            sb.append( "Title: ")
+                .append( file.getName().replace(".netr", "") )
                 .append( SEP )
+                .append( "Date: " )
                 .append( LocalDateTime.now() )
                 .append( SEP ).append( SEP );
             
@@ -56,13 +58,18 @@ public class Report{
             for( Node node : nodes ){
                 sb.append( node.getActivityName() )
                     .append( " : " )
-                    .append( node.getActivityDuration() );
+                    .append( node.getActivityDuration() )
+                    .append( SEP );
             }
 
             // Display paths
-            sb.append( SEP ).append( SEP ).append( "Paths:" )
-                    .append( SEP );
-                
+            sb.append( SEP ).append( SEP ).append( "Paths:" );
+            if( processor == null || processor.failed() ){
+                sb.append( " THERE ARE NO PATHS." );
+            } else {
+                sb.append( SEP )
+                    .append( processor.outputString() );
+            }
             
 
             writer.append( sb );
