@@ -5,21 +5,33 @@ import javax.swing.JOptionPane;
 import java.awt.Point;
 import java.util.Scanner;
 
+import javax.swing.JButton;
+import javax.swing.GroupLayout;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 
 public class Window extends javax.swing.JFrame {
 	
-    private javax.swing.JButton jButtonAdd;
-    private javax.swing.JButton jButtonConnect;
-    private javax.swing.JButton jButtonRestart;
-    private javax.swing.JButton jButtonEnd;
-    private javax.swing.JButton jButtonHelp;
-    private javax.swing.JButton jButtonAbout;
-    private javax.swing.JButton jButtonProcess;
+    private JButton jButtonAdd;
+    private JButton jButtonConnect;
+    private JButton jButtonRestart;
+    private JButton jButtonEnd;
+    private JButton jButtonHelp;
+    private JButton jButtonAbout;
+    private JButton jButtonProcess;
+    private JButton jButtonFileReport;
     
     private javax.swing.JPanel  jPanel1;
     
-    public List<Node> nodes;
-    public List<Add> connect;
+    private List<Node> nodes;
+    private List<Add> connect;
+    Processor processor;
+
     
     private int APPLET_WIDTH = 800, APPLET_HEIGHT = 600;
     
@@ -41,13 +53,14 @@ public class Window extends javax.swing.JFrame {
         } );
         
         //jButton Creation
-        jButtonAdd = new javax.swing.JButton();
-        jButtonConnect = new javax.swing.JButton();
-        jButtonRestart = new javax.swing.JButton();
-        jButtonEnd = new javax.swing.JButton();
-        jButtonHelp = new javax.swing.JButton();
-        jButtonAbout = new javax.swing.JButton();
-        jButtonProcess = new javax.swing.JButton();
+        jButtonAdd = new JButton();
+        jButtonConnect = new JButton();
+        jButtonRestart = new JButton();
+        jButtonEnd = new JButton();
+        jButtonHelp = new JButton();
+        jButtonAbout = new JButton();
+        jButtonProcess = new JButton();
+        jButtonFileReport = new JButton();
         
         //EXIT ON CLOSE as Default
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -61,17 +74,17 @@ public class Window extends javax.swing.JFrame {
         /**LAYOUT**/
         
         //Set group layout on jpanel1
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         
         //Set horizontal group
         jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 525, Short.MAX_VALUE));
         
         //Set vertical group
         jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 523, Short.MAX_VALUE)); 
         
         /**END LAYOUT**/
@@ -85,8 +98,8 @@ public class Window extends javax.swing.JFrame {
         jButtonEnd.setBackground(new java.awt.Color(51, 204, 255));
         jButtonEnd.setText("End Application");
         
-        jButtonEnd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButtonEnd.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 jButtonEndActionPerformed(evt);
             }
         });
@@ -95,8 +108,8 @@ public class Window extends javax.swing.JFrame {
         jButtonRestart.setBackground(new java.awt.Color(51, 204, 255));
         jButtonRestart.setText("Restart");
         
-        jButtonRestart.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButtonRestart.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 jButtonRestartActionPerformed(evt);
             }
         });
@@ -105,8 +118,8 @@ public class Window extends javax.swing.JFrame {
         jButtonAdd.setBackground(new java.awt.Color(51, 204, 255));
         jButtonAdd.setText("Add Activity");
         
-        jButtonAdd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButtonAdd.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 jButtonAddActionPerformed(evt);
             }
         });
@@ -115,39 +128,49 @@ public class Window extends javax.swing.JFrame {
         jButtonConnect.setBackground(new java.awt.Color(51, 204, 255));
         jButtonConnect.setText("Connect Activities");
         
-        jButtonConnect.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButtonConnect.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 jButtonConnectActionPerformed(evt);
             }
         });
         
-      //About Button
+        //About Button
         jButtonAbout.setBackground(new java.awt.Color(51, 204, 255));
         jButtonAbout.setText("About");
         
-        jButtonAbout.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButtonAbout.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 jButtonAboutActionPerformed(evt);
             }
         });
         
-        //About Button
+        //Help Button
         jButtonHelp.setBackground(new java.awt.Color(51, 204, 255));
         jButtonHelp.setText("Help");
         
-        jButtonHelp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButtonHelp.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 jButtonHelpActionPerformed(evt);
             }
         });
         
-      //About Button
+        //Process Button
         jButtonProcess.setBackground(new java.awt.Color(51, 204, 255));
         jButtonProcess.setText("Process");
-        
-        jButtonProcess.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+
+        jButtonProcess.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 jButtonProcessActionPerformed(evt);
+            }
+        });
+
+        //FileReport Button
+        jButtonFileReport.setBackground(new java.awt.Color(51, 204, 255));
+        jButtonFileReport.setText("Report");
+
+        jButtonFileReport.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                jButtonProcessFileReportPerformed(evt);
             }
         });
         
@@ -155,43 +178,46 @@ public class Window extends javax.swing.JFrame {
         /**END BUTTON SETUP**/
         
         /**ADDING COMPONENTS TO JPANEL**/
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                	.addComponent(jButtonAdd, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
-                	.addComponent(jButtonConnect, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
-                	.addComponent(jButtonProcess, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
-                    .addComponent(jButtonRestart, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
-                    .addComponent(jButtonAbout, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
-                    .addComponent(jButtonHelp, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
-                    .addComponent(jButtonEnd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addContainerGap()
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                	.addComponent(jButtonAdd, GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                	.addComponent(jButtonConnect, GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                	.addComponent(jButtonProcess, GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                    .addComponent(jButtonRestart, GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                    .addComponent(jButtonAbout, GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                    .addComponent(jButtonHelp, GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                    .addComponent(jButtonFileReport, GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                    .addComponent(jButtonEnd, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+                .addComponent(jPanel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(141, 141, 141)
-                                .addComponent(jButtonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButtonConnect, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButtonProcess, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButtonRestart, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButtonAbout, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButtonHelp, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButtonEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jButtonAdd, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButtonConnect, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButtonProcess, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButtonRestart, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButtonAbout, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButtonHelp, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButtonFileReport, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButtonEnd, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()))))));
         //PACK
         pack();
@@ -203,17 +229,17 @@ public class Window extends javax.swing.JFrame {
     }
     
     /**ACTIONS**/
-    private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jButtonAddActionPerformed(ActionEvent evt) {
        
        JOptionPane.showMessageDialog( this, "Click where you want the activity located.");
     }
 
-    private void jButtonConnectActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jButtonConnectActionPerformed(ActionEvent evt) {
 
         JOptionPane.showMessageDialog( this, "Right click the predecessor activity to link the activities.");
     }
     
-    private void jButtonRestartActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jButtonRestartActionPerformed(ActionEvent evt) {
 
         JOptionPane.showMessageDialog( this, "Network Diagram Cleared."); 
         
@@ -224,20 +250,20 @@ public class Window extends javax.swing.JFrame {
         repaint();
     }
     
-    private void jButtonEndActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jButtonEndActionPerformed(ActionEvent evt) {
 
         JOptionPane.showMessageDialog( this, "Application will close.");
         System.exit(0);
     }
     
-    private void jButtonAboutActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jButtonAboutActionPerformed(ActionEvent evt) {
 
         JOptionPane.showMessageDialog( this, "Created by\n"
         		+ "Raquel Fierros    Andrew Resto    Aaron Gurrola\n"
         		+"\nThe program is designed to process activity diagrams from user inputs.");
     }
     
-    private void jButtonHelpActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jButtonHelpActionPerformed(ActionEvent evt) {
 
         JOptionPane.showMessageDialog( this, "Start by creating an activity node."
         		+"\nThe first node created is the head.\n"
@@ -245,16 +271,57 @@ public class Window extends javax.swing.JFrame {
         		+"To exit the program, press the End Application button.");
     }
     
-    private void jButtonProcessActionPerformed(java.awt.event.ActionEvent evt) {
-        
-        Processor p = new Processor( this.nodes );
-        p.buildPaths();
+    private void jButtonProcessActionPerformed(ActionEvent evt) {
+        Processor p = processor; 
+        if( processor == null ){
+            // We only need to run through this once if we're 
+            // nulling out the processor (processor=null;) when a change has happened in the 
+            // network.
+            p = processor = new Processor( this.nodes );
+            p.buildPaths();
+        }
 
         if( p.failed() ){
             JOptionPane.showMessageDialog( this, p.failureMessage(), "HEY!! We got a PROBLEM.", JOptionPane.ERROR_MESSAGE );
         } else {
             JOptionPane.showMessageDialog( this, p.outputString());
         }
+    }
+
+    private void jButtonProcessFileReportPerformed( ActionEvent evt ){
+        // Open some stuff
+        JFileChooser chooser = new JFileChooser(".");
+        chooser.setFileFilter( new FileNameExtensionFilter("Network Reports", "netr") );
+        int choice = chooser.showOpenDialog( this );
+
+        if ( choice != JFileChooser.APPROVE_OPTION ){ return; }
+
+        java.io.File file = chooser.getSelectedFile();
+
+        if( !file.exists() ){
+            JOptionPane.showMessageDialog( this, "A new file will be created." );
+
+            if( !file.getName().endsWith(".netr") ){
+                file = new java.io.File( file.getAbsolutePath() + ".netr" );
+            }
+
+        } else {
+
+            // really naive MIME check
+            if( !file.getName().endsWith(".netr") ){
+                JOptionPane.showMessageDialog( this, "Incorrect file type.", 
+                    "HEY!! We got a PROBLEM.", JOptionPane.ERROR_MESSAGE );
+                return;
+            }
+
+            String question = "Are you sure you would like to overwrite this file?";
+            int response = JOptionPane.showConfirmDialog( this, question, "Confirm", 
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if( response != JOptionPane.YES_OPTION ){ return; } 
+        }
+
+        Report report = new Report( this.nodes, this.processor );
+        report.write( file );
     }
 
     private Node actionCreateNode( Point point ){
@@ -300,12 +367,14 @@ public class Window extends javax.swing.JFrame {
                 err = "Please enter an integer value.";
             } else {
                 
+                // : ACTION SUCCESFULLY CREATED HERE :
                 Node n = new Node();
                 n.setActivityName( nameS );
                 n.setActivityDuration( foundDuration );
                 n.setPoint( point );
 
                 this.nodes.add( n );
+                processor = null; // every time our network changes, it has not been processed.
                 return n;
             }
 
