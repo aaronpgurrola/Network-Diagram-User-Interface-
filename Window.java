@@ -310,6 +310,7 @@ public class Window extends javax.swing.JFrame {
                     
 		    // switch old duration with new duration 
                     this.nodes.set(i,n);
+	            repaint();
     				
     		    JOptionPane.showMessageDialog(null, "Duration updated." + " Activity " + nodes.get(i).getActivityName() +"'s new duration is: " + nodes.get(i).getActivityDuration());
     		  }
