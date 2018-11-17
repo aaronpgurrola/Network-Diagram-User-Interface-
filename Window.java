@@ -300,19 +300,23 @@ public class Window extends javax.swing.JFrame {
     		newDuration = JOptionPane.showInputDialog("Enter a new duration for activity" + " " + activity);
     		int nDuration = Integer.parseInt(newDuration);
     		
+		// find activity node to change
     		for(int i = 0; i < nodes.size(); i++)
     		{
     		  if((nodes.get(i).getActivityName()).equals(activity))
                   {
-			  
-    		    Node n = new Node();
+		   
+	           // set new duration 
+    		     Node n = new Node();
                     n.setActivityName(activity);
                     n.setActivityDuration(nDuration);
                     
+		    // keep original position of activity node 
                     Point point;
                     point = nodes.get(i).getPoint();
                     n.setPoint(point);
                     
+		    // switch old duration with new duration 
                     this.nodes.set(i,n);
     				
     		    JOptionPane.showMessageDialog(null, "Duration updated." + " Activity " + nodes.get(i).getActivityName() +"'s new duration is: " + nodes.get(i).getActivityDuration());
