@@ -1,7 +1,8 @@
-
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.JOptionPane;
+
 import java.awt.Point;
 import java.util.Scanner;
 
@@ -25,12 +26,14 @@ public class Window extends javax.swing.JFrame {
     private JButton jButtonAbout;
     private JButton jButtonProcess;
     private JButton jButtonFileReport;
+    private JButton jButtonChange;
     
     private javax.swing.JPanel  jPanel1;
     
     private List<Node> nodes;
     private List<Add> connect;
     Processor processor;
+    
 
     
     private int APPLET_WIDTH = 800, APPLET_HEIGHT = 600;
@@ -61,6 +64,7 @@ public class Window extends javax.swing.JFrame {
         jButtonAbout = new JButton();
         jButtonProcess = new JButton();
         jButtonFileReport = new JButton();
+        jButtonChange = new JButton();
         
         //EXIT ON CLOSE as Default
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -174,6 +178,16 @@ public class Window extends javax.swing.JFrame {
             }
         });
         
+      // Change Duration Button
+        jButtonChange.setBackground(new java.awt.Color(51, 204, 255));
+        jButtonChange.setText("Change Duration");
+        
+        jButtonChange.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+               jButtonChangeActionPerformed(evt);
+            }
+        });
+        
         
         /**END BUTTON SETUP**/
         
@@ -186,6 +200,7 @@ public class Window extends javax.swing.JFrame {
                 	.addComponent(jButtonAdd, GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
                 	.addComponent(jButtonConnect, GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
                 	.addComponent(jButtonProcess, GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                	.addComponent(jButtonChange, GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
                     .addComponent(jButtonRestart, GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
                     .addComponent(jButtonAbout, GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
                     .addComponent(jButtonHelp, GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
@@ -202,12 +217,14 @@ public class Window extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(141, 141, 141)
-                                .addComponent(jButtonAdd, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+                                .addGap(80, 80, 80)
+                                .addComponent(jButtonAdd, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButtonConnect, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButtonConnect, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButtonProcess, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButtonProcess, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(jButtonChange, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jButtonRestart, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -256,6 +273,60 @@ public class Window extends javax.swing.JFrame {
         System.exit(0);
     }
     
+    private void jButtonChangeActionPerformed(ActionEvent evt) {
+ 
+    	String activity = "";
+    	String newDuration; 
+    	
+        try {
+        	
+            String activityToChange = JOptionPane.showInputDialog("Enter the name of the activity to change: ");
+            
+            if (activityToChange.equals(null) || activityToChange.replace(" ", "").equals("")) {
+               
+                JOptionPane.showMessageDialog(null, "Write a valid activity name.");
+           }
+            else
+            {
+            	activity = activityToChange; 
+            }
+           
+        } catch (Exception ex) {
+        	
+            JOptionPane.showMessageDialog(null, "Write a valid activity name.");
+        }
+        try{
+        	
+    		newDuration = JOptionPane.showInputDialog("Enter a new duration for activity" + " " + activity);
+    		int nDuration = Integer.parseInt(newDuration);
+    		
+    		for(int i = 0; i < nodes.size(); i++)
+    		{
+    		  if((nodes.get(i).getActivityName()).equals(activity))
+                  {
+			  
+    		    Node n = new Node();
+                    n.setActivityName(activity);
+                    n.setActivityDuration(nDuration);
+                    
+                    Point point;
+                    point = nodes.get(i).getPoint();
+                    n.setPoint(point);
+                    
+                    this.nodes.set(i,n);
+    				
+    		    JOptionPane.showMessageDialog(null, "Duration updated." + " Activity " + nodes.get(i).getActivityName() +"'s new duration is: " + nodes.get(i).getActivityDuration());
+    		  }
+    			
+    		}
+            
+    	}catch(Exception ex){
+    		
+            JOptionPane.showMessageDialog(null, "Enter an integer for the duration.");
+            
+        }
+    }
+
     private void jButtonAboutActionPerformed(ActionEvent evt) {
 
         JOptionPane.showMessageDialog( this, "Created by\n"
@@ -325,7 +396,7 @@ public class Window extends javax.swing.JFrame {
     }
 
     private Node actionCreateNode( Point point ){
-        return actionCreateNode( "N" + String.valueOf( nodes.size() ), "10", point );
+        return actionCreateNode( " " + String.valueOf( nodes.size() ), " ", point );
     } 
 
     private Node actionCreateNode( String nameS, String durationS, Point point ) {
@@ -369,11 +440,11 @@ public class Window extends javax.swing.JFrame {
                 
                 // : ACTION SUCCESFULLY CREATED HERE :
                 Node n = new Node();
-                n.setActivityName( nameS );
-                n.setActivityDuration( foundDuration );
-                n.setPoint( point );
+                n.setActivityName(nameS);
+                n.setActivityDuration(foundDuration);
+                n.setPoint(point);
 
-                this.nodes.add( n );
+                this.nodes.add(n);
                 processor = null; // every time our network changes, it has not been processed.
                 return n;
             }
@@ -381,7 +452,7 @@ public class Window extends javax.swing.JFrame {
             JOptionPane.showMessageDialog( this, err, "HEY!! We got a PROBLEM.", JOptionPane.ERROR_MESSAGE );
             return actionCreateNode( nameS, durationS, point );
         } else {
-            // cancled? 
+ 
             return null;
         }
     }
