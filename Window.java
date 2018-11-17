@@ -33,9 +33,7 @@ public class Window extends javax.swing.JFrame {
     private List<Node> nodes;
     private List<Add> connect;
     Processor processor;
-    
-
-    
+  
     private int APPLET_WIDTH = 800, APPLET_HEIGHT = 600;
     
     public Window() {
@@ -92,7 +90,6 @@ public class Window extends javax.swing.JFrame {
             .addGap(0, 523, Short.MAX_VALUE)); 
         
         /**END LAYOUT**/
-        
         
         /**BUTTON SETUP**/
         
@@ -187,8 +184,7 @@ public class Window extends javax.swing.JFrame {
                jButtonChangeActionPerformed(evt);
             }
         });
-        
-        
+
         /**END BUTTON SETUP**/
         
         /**ADDING COMPONENTS TO JPANEL**/
@@ -277,13 +273,11 @@ public class Window extends javax.swing.JFrame {
  
     	String activity = "";
     	String newDuration; 
-    	
+	    
         try {
-        	
             String activityToChange = JOptionPane.showInputDialog("Enter the name of the activity to change: ");
             
             if (activityToChange.equals(null) || activityToChange.replace(" ", "").equals("")) {
-               
                 JOptionPane.showMessageDialog(null, "Write a valid activity name.");
            }
             else
@@ -292,11 +286,9 @@ public class Window extends javax.swing.JFrame {
             }
            
         } catch (Exception ex) {
-        	
             JOptionPane.showMessageDialog(null, "Write a valid activity name.");
         }
         try{
-        	
     		newDuration = JOptionPane.showInputDialog("Enter a new duration for activity" + " " + activity);
     		int nDuration = Integer.parseInt(newDuration);
     		
@@ -321,11 +313,9 @@ public class Window extends javax.swing.JFrame {
     				
     		    JOptionPane.showMessageDialog(null, "Duration updated." + " Activity " + nodes.get(i).getActivityName() +"'s new duration is: " + nodes.get(i).getActivityDuration());
     		  }
-    			
     		}
             
     	}catch(Exception ex){
-    		
             JOptionPane.showMessageDialog(null, "Enter an integer for the duration.");
             
         }
@@ -461,7 +451,6 @@ public class Window extends javax.swing.JFrame {
         }
     }
 
-        
     /**END ACTIONS**/
     
     public static void main(String args[]) {
