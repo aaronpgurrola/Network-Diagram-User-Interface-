@@ -27,6 +27,7 @@ public class Window extends javax.swing.JFrame {
     private JButton jButtonProcess;
     private JButton jButtonFileReport;
     private JButton jButtonChange;
+    private JButton jButtonCrit;
     
     private javax.swing.JPanel  jPanel1;
     
@@ -63,6 +64,7 @@ public class Window extends javax.swing.JFrame {
         jButtonProcess = new JButton();
         jButtonFileReport = new JButton();
         jButtonChange = new JButton();
+        jButtonCrit = new JButton();
         
         //EXIT ON CLOSE as Default
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -94,6 +96,17 @@ public class Window extends javax.swing.JFrame {
         /**BUTTON SETUP**/
         
         /*All buttons setup with setBackground, setText, and configured ActionListener*/
+        
+        
+      //Crits Application Button
+        jButtonCrit.setBackground(new java.awt.Color(51, 204, 255));
+        jButtonCrit.setText("Critical Paths");
+        
+        jButtonCrit.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                jButtonCritActionPerformed(evt);
+            }
+        });
         
         //End Application Button
         jButtonEnd.setBackground(new java.awt.Color(51, 204, 255));
@@ -196,6 +209,7 @@ public class Window extends javax.swing.JFrame {
                 	.addComponent(jButtonAdd, GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
                 	.addComponent(jButtonConnect, GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
                 	.addComponent(jButtonProcess, GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                	.addComponent(jButtonCrit, GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
                 	.addComponent(jButtonChange, GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
                     .addComponent(jButtonRestart, GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
                     .addComponent(jButtonAbout, GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
@@ -213,24 +227,26 @@ public class Window extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(80, 80, 80)
-                                .addComponent(jButtonAdd, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE)
+                                .addGap(48, 48, 48)
+                                .addComponent(jButtonAdd, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jButtonConnect, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButtonProcess, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButtonProcess, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(jButtonChange, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButtonCrit, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButtonRestart, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButtonChange, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButtonAbout, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButtonRestart, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButtonHelp, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButtonAbout, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButtonFileReport, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButtonHelp, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButtonEnd, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jButtonFileReport, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButtonEnd, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()))))));
         //PACK
         pack();
@@ -297,22 +313,10 @@ public class Window extends javax.swing.JFrame {
     		{
     		  if((nodes.get(i).getActivityName()).equals(activity))
                   {
-		   
-	           // set new duration 
-    		     Node n = new Node();
-                    n.setActivityName(activity);
-                    n.setActivityDuration(nDuration);
-                    
-		    // keep original position of activity node 
-                    Point point;
-                    point = nodes.get(i).getPoint();
-                    n.setPoint(point);
-                    
-		    // switch old duration with new duration 
-                   this.nodes.set(i,n);
-	            repaint();
-    				
-    		    JOptionPane.showMessageDialog(null, "Duration updated." + " Activity " + nodes.get(i).getActivityName() +"'s new duration is: " + nodes.get(i).getActivityDuration());
+    			  	//changes to only change duration of given node
+    			  	nodes.get(i).setActivityDuration(nDuration);
+    			  	repaint();
+    			  	JOptionPane.showMessageDialog(null, "Duration updated." + " Activity " + nodes.get(i).getActivityName() +"'s new duration is: " + nodes.get(i).getActivityDuration());
     		  }
     		}
             
@@ -337,7 +341,20 @@ public class Window extends javax.swing.JFrame {
         		+"To exit the program, press the End Application button.");
     }
     
+    
+    private void jButtonCritActionPerformed(ActionEvent evt) {
+    	processor = null;
+        Processor p = processor = new Processor( this.nodes ); 
+        p.buildPaths();
+        if( p.failed() ){
+            JOptionPane.showMessageDialog( this, p.failureMessage(), "Processing error.", JOptionPane.ERROR_MESSAGE );
+        } else {
+        	JOptionPane.showMessageDialog( this, "Critical Paths: "+p.crits());
+        }
+    	
+    }
     private void jButtonProcessActionPerformed(ActionEvent evt) {
+    	processor = null;
         Processor p = processor; 
         if( processor == null ){
             // We only need to run through this once if we're 
@@ -348,16 +365,24 @@ public class Window extends javax.swing.JFrame {
         }
 
         if( p.failed() ){
-            JOptionPane.showMessageDialog( this, p.failureMessage(), "HEY!! We got a PROBLEM.", JOptionPane.ERROR_MESSAGE );
+            JOptionPane.showMessageDialog( this, p.failureMessage(), "Processing error.", JOptionPane.ERROR_MESSAGE );
         } else {
-            JOptionPane.showMessageDialog( this, p.outputString());
+            JOptionPane.showMessageDialog( this, "Paths: "+p.outputString());
         }
     }
 
     private void jButtonProcessFileReportPerformed( ActionEvent evt ){
         // Open some stuff
+    	processor = null;
+        Processor p = processor; 
+        p = processor = new Processor( this.nodes );
+        p.buildPaths();
+        
+        if( p.failed() )
+            JOptionPane.showMessageDialog( this, p.failureMessage(), "Processing error.", JOptionPane.ERROR_MESSAGE );
+
         JFileChooser chooser = new JFileChooser(".");
-        chooser.setFileFilter( new FileNameExtensionFilter("Network Reports", "netr") );
+        chooser.setFileFilter( new FileNameExtensionFilter("Network Reports", ".txt") );
         int choice = chooser.showOpenDialog( this );
 
         if ( choice != JFileChooser.APPROVE_OPTION ){ return; }
@@ -367,14 +392,14 @@ public class Window extends javax.swing.JFrame {
         if( !file.exists() ){
             JOptionPane.showMessageDialog( this, "A new file will be created." );
 
-            if( !file.getName().endsWith(".netr") ){
-                file = new java.io.File( file.getAbsolutePath() + ".netr" );
+            if( !file.getName().endsWith(".txt") ){
+                file = new java.io.File( file.getAbsolutePath() + ".txt" );
             }
 
         } else {
 
             // really naive MIME check
-            if( !file.getName().endsWith(".netr") ){
+            if( !file.getName().endsWith(".txt") ){
                 JOptionPane.showMessageDialog( this, "Incorrect file type.", 
                     "HEY!! We got a PROBLEM.", JOptionPane.ERROR_MESSAGE );
                 return;
@@ -391,7 +416,7 @@ public class Window extends javax.swing.JFrame {
     }
 
     private Node actionCreateNode( Point point ){
-        return actionCreateNode( " " + String.valueOf( nodes.size() ), " ", point );
+        return actionCreateNode( "", "", point );
     } 
 
     private Node actionCreateNode( String nameS, String durationS, Point point ) {
@@ -444,7 +469,7 @@ public class Window extends javax.swing.JFrame {
                 return n;
             }
 
-            JOptionPane.showMessageDialog( this, err, "HEY!! We got a PROBLEM.", JOptionPane.ERROR_MESSAGE );
+            JOptionPane.showMessageDialog( this, err, "Error: Enter a valid name/duration.", JOptionPane.ERROR_MESSAGE );
             return actionCreateNode( nameS, durationS, point );
         } else {
  
