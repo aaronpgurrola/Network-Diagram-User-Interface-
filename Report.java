@@ -1,4 +1,3 @@
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.File;
@@ -43,14 +42,17 @@ public class Report{
 
             // Header 
             sb.append( "Title: ")
-                .append( file.getName().replace(".netr", "") )
+            	.append("\t")
+                .append( file.getName().replace(".txt", "") )
                 .append( SEP )
+                .append("\n")
                 .append( "Date: " )
                 .append( LocalDateTime.now() )
+                .append("\n")
                 .append( SEP ).append( SEP );
             
             // Display activities in alphabetical order 
-            sb.append( "Activitys:" )
+            sb.append( "Activities:" )
                 .append( SEP );
 
             Collections.sort( nodes, sorter );
@@ -67,8 +69,11 @@ public class Report{
             if( processor == null || processor.failed() ){
                 sb.append( " THERE ARE NO PATHS." );
             } else {
-                sb.append( SEP )
-                    .append( processor.outputString() );
+            	processor.pathsSort();
+                for (int i = 0; i < processor.paths.size(); i++) {
+                	sb.append( SEP )
+                	.append(processor.paths.get(i).toString());
+                }
             }
             
 
