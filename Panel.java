@@ -71,9 +71,13 @@ public class Panel extends javax.swing.JPanel {
                         
                         // Sets up some data for the processor.
                         predecessor.add( destination ); // add child
+                        
+                        //System.out.println("Children for "+predecessor.getActivityName()+" = "+predecessor.children.size());
+                        destination.addParent(predecessor);//ad parent
                         destination.incPredecessors();      
 
                         connect.add(a);
+                        
                     }
 
                     flag = false;
