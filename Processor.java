@@ -1,3 +1,4 @@
+
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -19,29 +20,52 @@ public class Processor {
 	}
 	
 	private void buildHeads() {
-		// System.out.println("size of nodes = "+nodes.size());
 		for (int i = 0; i < nodes.size(); i++) {
-			// System.out.println((!nodes.get(i).hasPredecessor())+" + "+i+"Activity name: "+nodes.get(i).getActivityName());
 			if(!nodes.get(i).hasPredecessor()) {
-				System.out.println(i);
 				heads.add((nodes.get(i)));
 			}
 		}
 	}
 	
+	/**CONNECTION METHODS**/
 	public boolean isConnected() {
-		for (int i = 0; i < nodes.size();i++) {
-			if (!nodes.get(i).hasPredecessor()) {
-				if (nodes.get(i).isTail())
+		resetConnection();
+		if (nodes.isEmpty())
+			return true;
+		if(nodes.size()==1)
+			return true;
+		else {
+			ConnectionBomb(nodes.get(0));
+			for (int i = 0; i < nodes.size(); i++) {
+				if (nodes.get(i).connected==false) {
+					
 					return false;
-			} 
+				}
+			}
+			return true;
 		}
-		return true;
 	}
+	private void ConnectionBomb(Node n) {
+		n.connect();
+		for (int i = 0; i < n.children.size(); i++) {
+			if(n.children.get(i).connected==false) {
+				ConnectionBomb(n.children.get(i));
+				}
+		}
+		for (int i = 0; i < n.parents.size(); i++) {
+			if(n.parents.get(i).connected==false) {
+				ConnectionBomb(n.parents.get(i));
+				}
+		}	
+	}
+	private void resetConnection() {
+		for (Node node : nodes)
+			node.connected=false;
+	}
+	/**End connection methods**/
 	
 	public boolean validHead() {
 		return !heads.isEmpty();
-		// return (!nodes.get(0).hasPredecessor());
 	}
 	
 	public String outputString() {
@@ -53,9 +77,10 @@ public class Processor {
 	}
 	
 	public void buildPaths() {
+		//didFail=false;
 		if(!isConnected()) {
 			
-			System.out.println("not connected");
+			//System.out.println("not connected");
 			didFail = true;
 			failureString = "Not connected.";
 			return;
@@ -83,13 +108,7 @@ public class Processor {
 		}
 	}
 	
-	public boolean failed(){
-		return didFail;
-	}
-
-	public String failureMessage(){
-		return failureString;
-	}
+	
 	
 	public void buildPathsAlg(Node head) {
 		Path p = new Path();
@@ -112,7 +131,7 @@ public class Processor {
 		pa.add(child);
 
 		if (!pa.loopCheck()) {
-			// JOptionPane.showMessageDialog(null, "There is a loop.");
+			//System.out.println("Loop found");
 			didFail = true;
 			failureString = "There is a loop.";
 			return;
@@ -143,5 +162,32 @@ public class Processor {
 		}
 	}
 	
+	
+	public boolean failed(){
+		return didFail;
+	}
+
+	public String failureMessage(){
+		return failureString;
+	}
+	
+	public String crits() {
+		String crits= "";
+		int max = findMax();
+		for (int i = 0; i < paths.size(); i++) {
+			if (paths.get(i).getDuration()==max)
+				crits += paths.get(i).toString();
+		}
+		return crits;
+	}
+	
+	public int findMax() {
+		int max = paths.get(0).getDuration();
+		for (int i = 1; i < paths.size();i++) {
+			if (paths.get(i).getDuration()>max)
+				max = paths.get(i).getDuration();
+		}
+		return max;
+	}
 	
 }
