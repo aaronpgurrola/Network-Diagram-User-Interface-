@@ -4,15 +4,20 @@ import java.util.ArrayList;
 public class Node {
     
     public Node() {
+    	connected = false;
         point = new Point();
     }
+    
+    
     private int activityDuration;
     private String activityName; // name of the activity
     private Point point; // location of the node 
      
     public int predecessors = 0;
     public List <Node> children = new ArrayList<>();
+    public List <Node> parents = new ArrayList<>();
     private boolean isHead = false;
+    public boolean connected = false;
     private short processed = 0;
     
     //getters setters
@@ -50,8 +55,16 @@ public class Node {
     	return (children.isEmpty());
     }
     
+    public boolean isHead() {
+    	return (parents.isEmpty());
+    }
+    
     public void add(Node n) {
     	children.add(n);
+    }
+    
+    public void addParent(Node n) {
+    	parents.add(n);
     }
     
     public void reset() {
@@ -84,5 +97,13 @@ public class Node {
     
     public boolean hasChildren() {
     	return (!children.isEmpty());
+    }
+    
+    public boolean hasParents() {
+    	return (!parents.isEmpty());
+    }
+    
+    public void connect() {
+    	connected = true;
     }
 }
