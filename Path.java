@@ -1,3 +1,4 @@
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -69,6 +70,6 @@ public class Path {
 	}
 	
 	public String toString() {
-		return ("\nPath: "+pathString()+"\nDuration: "+getDuration());
+		return ("\nPath: "+pathString()+"\n Duration: "+getDuration());
 	}
 }
